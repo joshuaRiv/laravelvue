@@ -205,6 +205,9 @@ export default {
       fullscreenLoading: false,
     }
   },
+  mounted(){
+    this.getListarUsuarios();
+  },
   computed: {
     //obtener el numero de paginas
     pageCount() {

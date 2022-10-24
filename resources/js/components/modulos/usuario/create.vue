@@ -87,6 +87,17 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group-row">
+                        <label class="col-md-3 col-form-label">Rol</label>
+                        <div class="col-md-9">
+                          <el-select v-model="fillCreateUsuario.nIdRol" placeholder="Seleccione un rol" clearable>
+                            <el-option v-for="item in listRoles" :key="item.id" :label="item.name" :value="item.id">
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group-row">
                         <label class="col-md-3 col-form-label">Fotografía</label>
                         <div class="col-md-9">
                           <!-- <el-button slot="trigger" size="small" type="primary">Selecciona un archivo</el-button> -->
@@ -99,7 +110,8 @@
               </div>
               <div class="card-footer">
                 <div class="row justify-content-center">
-                  <button class="btn btnWidth btn-info btn-flat" @click="setRegistrarUsuario" v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
+                  <button class="btn btnWidth btn-info btn-flat" @click="setRegistrarUsuario"
+                    v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
                   <button class="btn btnWidth btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
                 </div>
               </div>
@@ -108,7 +120,7 @@
         </div>
       </div>
     </div>
-    <div class="toast fade bg-primary" :class="{show: modalShow}" :style="modalShow ? mostrarModal : ocultarModal"
+    <div class="toast fade bg-primary" :class="{ show: modalShow }" :style="modalShow ? mostrarModal : ocultarModal"
       style="position: absolute; right: 36%; top: 3em; z-index: 9999;">
       <div class="toast-header">
         <div class="rounded mr-2 bg-light" style="height: 20px; width: 20px"></div>
@@ -118,8 +130,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="toast-body p-3" v-if="mensajeError.length == 1 ">
-        {{mensajeError[0]}}
+      <div class="toast-body p-3" v-if="mensajeError.length == 1">
+        {{ mensajeError[0] }}
       </div>
       <div class="toast-body" v-else="mensajeError.length > 1 ">
         Por favor completa el formulario antes de continuar
@@ -142,7 +154,9 @@ export default {
         cCorreo: '',
         cContrasena: '',
         oFotografia: '',
+        nIdRol: '',
       },
+      listRoles: [],
       form: new FormData,
       fullscreenLoading: false,
       modalShow: false,
@@ -157,10 +171,13 @@ export default {
       mensajeError: [],
     }
   },
+  mounted() {
+    this.getListarRoles();
+  },
   computed: {
   },
   methods: {
-    limpiarCriteriosBsq(){
+    limpiarCriteriosBsq() {
       this.fillCreateUsuario.cPrimerNombre = '';
       this.fillCreateUsuario.cApellido = '';
       this.fillCreateUsuario.cUsuario = '';
@@ -170,6 +187,15 @@ export default {
     },
     abrirModal() {
       this.modalShow = !this.modalShow;
+    },
+    getListarRoles() {
+      this.fullscreenLoading = true;
+
+      const url = '/administracion/rol/getListarRoles';
+      axios.get(url).then(res => {
+        this.listRoles = res.data;
+        this.fullscreenLoading = false;
+      });
     },
     getFile(e) {
       this.fillCreateUsuario.oFotografia = e.target.files[0];
@@ -191,29 +217,37 @@ export default {
       this.form.append('file', this.fillCreateUsuario.oFotografia);
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
       var url = '/archivo/setRegistrarArchivo';
-      axios.post(url, this.form, config).then(res => { 
-      let nIdFile = res.data[0].nIdFile;
-      this.setGuardarUsuario(nIdFile);
+      axios.post(url, this.form, config).then(res => {
+        let nIdFile = res.data[0].nIdFile;
+        this.setGuardarUsuario(nIdFile);
       });
     },
-    setGuardarUsuario(nIdFile){
+    setGuardarUsuario(nIdFile) {
       let url = '/administracion/usuario/setRegistrarUsuario';
-        axios.post(url, {
-          'cPrimerNombre': this.fillCreateUsuario.cPrimerNombre,
-          'cSegundoNombre': this.fillCreateUsuario.cSegundoNombre,
-          'cApellido': this.fillCreateUsuario.cApellido,
-          'cUsuario': this.fillCreateUsuario.cUsuario,
-          'cCorreo': this.fillCreateUsuario.cCorreo,
-          'cContrasena': this.fillCreateUsuario.cContrasena,
-          'oFotografia': nIdFile,
-        }).then(res => {
-          console.log("Registro usuario exitosamente");
-          this.fullscreenLoading = false;
-          this.$router.push('/usuarios');
-        });
+      axios.post(url, {
+        'cPrimerNombre': this.fillCreateUsuario.cPrimerNombre,
+        'cSegundoNombre': this.fillCreateUsuario.cSegundoNombre,
+        'cApellido': this.fillCreateUsuario.cApellido,
+        'cUsuario': this.fillCreateUsuario.cUsuario,
+        'cCorreo': this.fillCreateUsuario.cCorreo,
+        'cContrasena': this.fillCreateUsuario.cContrasena,
+        'oFotografia': nIdFile,
+      }).then(res => {
+        console.log(res.data)
+        this.setEditarRolByUsuario(res.data);
+      });
     },
-
-
+    setEditarRolByUsuario(nIdUsuario) {
+      let url = '/administracion/usuario/setEditarRolByUsuario';
+      axios.post(url, {
+        'nIdUsuario': nIdUsuario,
+        'nIdRol': this.fillCreateUsuario.nIdRol,
+      }).then(res => {
+        console.log(res.data);
+        this.fullscreenLoading = false;
+        this.$router.push('/usuarios');
+      });
+    },
     validarRegistrarUsuario() {
       this.error = 0;
       this.mensajeError = [];
