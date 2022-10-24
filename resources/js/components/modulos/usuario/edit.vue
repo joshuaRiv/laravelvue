@@ -87,6 +87,17 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group-row">
+                        <label class="col-md-3 col-form-label">Rol</label>
+                        <div class="col-md-9">
+                          <el-select v-model="fillEditarUsuario.nIdRol" placeholder="Seleccione un rol" clearable>
+                            <el-option v-for="item in listRoles" :key="item.id" :label="item.name" :value="item.id">
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group-row">
                         <label class="col-md-3 col-form-label">Fotografía</label>
                         <div class="col-md-9">
                           <!-- <el-button slot="trigger" size="small" type="primary">Selecciona un archivo</el-button> -->
@@ -109,7 +120,7 @@
         </div>
       </div>
     </div>
-    <div class="toast fade bg-primary" :class="{show: modalShow}" :style="modalShow ? mostrarModal : ocultarModal"
+    <div class="toast fade bg-primary" :class="{ show: modalShow }" :style="modalShow ? mostrarModal : ocultarModal"
       style="position: absolute; right: 36%; top: 3em; z-index: 9999;">
       <div class="toast-header">
         <div class="rounded mr-2 bg-light" style="height: 20px; width: 20px"></div>
@@ -119,8 +130,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="toast-body p-3" v-if="mensajeError.length == 1 ">
-        {{mensajeError[0]}}
+      <div class="toast-body p-3" v-if="mensajeError.length == 1">
+        {{ mensajeError[0] }}
       </div>
       <div class="toast-body" v-else="mensajeError.length > 1 ">
         Por favor completa el formulario antes de continuar
@@ -143,8 +154,10 @@ export default {
         cUsuario: '',
         cCorreo: '',
         cContrasena: '',
+        nIdRol: '',
         oFotografia: '',
       },
+      listRoles: [],
       form: new FormData,
       fullscreenLoading: false,
       modalShow: false,
@@ -161,6 +174,7 @@ export default {
   },
   mounted() {
     this.getUsuarioById();
+    this.getListarRoles();
   },
   methods: {
     getUsuarioById() {
@@ -172,7 +186,6 @@ export default {
           'nIdUsuario': this.fillEditarUsuario.nIdUsuario,
         }
       }).then(res => {
-        console.log(res.data);
         this.fillEditarUsuario.cPrimerNombre = res.data[0].firstname;
         this.fillEditarUsuario.cSegundoNombre = res.data[0].secondname;
         this.fillEditarUsuario.cApellido = res.data[0].lastname;
@@ -191,6 +204,28 @@ export default {
     },
     abrirModal() {
       this.modalShow = !this.modalShow;
+    },
+    getListarRoles() {
+      this.fullscreenLoading = true;
+
+      const url = '/administracion/rol/getListarRoles';
+      axios.get(url).then(res => {
+        this.listRoles = res.data;
+        this.fullscreenLoading = false;
+        this.getRolByUsuario();
+      });
+    },
+    getRolByUsuario() {
+      const url = '/administracion/usuario/getRolByUsuario';
+      console.log(this.fillEditarUsuario.nIdUsuario);
+      axios.get(url, {
+        params: {
+          'nIdUsuario': this.fillEditarUsuario.nIdUsuario,
+        }
+      }).then(res => {
+        console.log(res.data);
+        this.fullscreenLoading = false;
+      });
     },
     getFile(e) {
       this.fillEditarUsuario.oFotografia = e.target.files[0];

@@ -140,12 +140,26 @@ class UsersController extends Controller
         $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = '') : $nIdUsuario;
         $nIdRol = ($nIdRol == NULL) ? ($nIdRol = '') : $nIdRol;
     
-        $res = DB::select('call sp_Usuario_setEditarRolByUsuario (?,?)',
+        DB::select('call sp_Usuario_setEditarRolByUsuario (?,?)',
         [
             $nIdUsuario,
             $nIdRol,
         ]);
+    }
 
-        return $res;
+    // 29 - 8:10 | Res retorna html y no el valor
+    public function getRolByUsuario(Request $request){
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario = $request->nIdUsuario;
+
+        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = '') : $nIdUsuario;
+    
+        $res = DB::select('call sp_Usuario_getRolByUsuario (?)',
+        [
+            $nIdUsuario,
+        ]);
+
+        return $res[0]->nIdRol;
     }
 }
