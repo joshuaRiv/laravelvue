@@ -81,7 +81,7 @@
                         <td> {{ rol.slug }} </td>
                         <td>
                           <router-link class="btn btn-flat btn-info btn-sm"
-                            :to="{ name: 'rol.editar', params: { id: rol.id } }">
+                            :to="{ name: 'permiso.editar', params: { id: rol.id } }">
                             <i class="fas fa-pencil-alt"></i> Editar
                           </router-link>
                         </td>

@@ -19,6 +19,7 @@ import RolEdit from './components/modulos/rol/edit';
 
 import Permiso from './components/modulos/permiso/index';
 import PermisoCreate from './components/modulos/permiso/create';
+import PermisoEdit from './components/modulos/permiso/edit';
 
 Vue.use(Router)
 
@@ -33,6 +34,12 @@ export default new Router({
     
     {path: '/permisos', component: Permiso},
     {path: '/permisos/crear', component: PermisoCreate},
+    {
+      path: '/permisos/editar/:id',
+      name:'permiso.editar', 
+      component: PermisoEdit,
+      props: true
+    },
 
     {path: '/roles', component: Rol},
     {path: '/roles/crear', component: RolCreate},
