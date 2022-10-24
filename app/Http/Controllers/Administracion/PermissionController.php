@@ -31,4 +31,23 @@ class PermissionController extends Controller
 
         return $res;
     }
+    
+    public function setRegistrarPermisos(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $cNombre = $request->cNombre;
+        $cSlug = $request->cSlug;
+
+        $cNombre = ($cNombre == NULL)  ? ($cNombre = '') : $cNombre;
+        $cSlug = ($cSlug == NULL)  ? ($cSlug = '') : $cSlug;
+
+        DB::select(
+            'call sp_Permiso_setRegistrarPermisos (?,?)',
+            [
+                $cNombre,
+                $cSlug,
+            ]
+        );
+    }
 }

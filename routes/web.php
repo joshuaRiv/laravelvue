@@ -24,6 +24,7 @@ Route::post('/administracion/rol/setRegistrarRolPermisos', 'Administracion\Roles
 Route::post('/administracion/rol/setEditarRolPermisos', 'Administracion\RolesController@setEditarRolPermisos');
 
 Route::get('/administracion/permiso/getListarPermisos', 'Administracion\PermissionController@getListarPermisos');
+Route::post('/administracion/permiso/setRegistrarPermisos', 'Administracion\PermissionController@setRegistrarPermisos');
 
 Route::get('/{optional?}', function () {
     return view('app');

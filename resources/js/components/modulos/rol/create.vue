@@ -25,7 +25,7 @@
                 <div class="card card-info">
                   <div class="card-header">
                     <h3 class="card-title">
-                      Formulario registrar Rol
+                      Formulario Registrar Rol
                     </h3>
                   </div>
                   <div class="card-body">

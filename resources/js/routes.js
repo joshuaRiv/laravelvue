@@ -5,7 +5,6 @@ import Dashboard from './components/modulos/dashboard/index';
 import Categoria from './components/modulos/categoria/index';
 import Cliente from './components/modulos/cliente/index';
 import Pedido from './components/modulos/pedido/index';
-import Permiso from './components/modulos/permiso/index';
 import Producto from './components/modulos/producto/index';
 import Reporte from './components/modulos/reporte/index';
 
@@ -17,7 +16,9 @@ import UsuarioView from './components/modulos/usuario/view';
 import Rol from './components/modulos/rol/index';
 import RolCreate from './components/modulos/rol/create';
 import RolEdit from './components/modulos/rol/edit';
-// import RolEdit from './components/modulos/rol/edit';
+
+import Permiso from './components/modulos/permiso/index';
+import PermisoCreate from './components/modulos/permiso/create';
 
 Vue.use(Router)
 
@@ -27,9 +28,11 @@ export default new Router({
     {path: '/categorias', component: Categoria},
     {path: '/clientes', component: Cliente},
     {path: '/pedidos', component: Pedido},
-    {path: '/permisos', component: Permiso},
     {path: '/productos', component: Producto},
     {path: '/reportes', component: Reporte},
+    
+    {path: '/permisos', component: Permiso},
+    {path: '/permisos/crear', component: PermisoCreate},
 
     {path: '/roles', component: Rol},
     {path: '/roles/crear', component: RolCreate},
@@ -39,12 +42,6 @@ export default new Router({
       component: RolEdit,
       props: true
     },
-    // {
-    //   path: '/roles/ver/:id',
-    //   name:'rol.ver',
-    //   component: UsuarioView,
-    //   props: true,
-    // },
 
     {path: '/usuarios', component: Usuario},
     {path: '/usuarios/crear', component: UsuarioCreate},

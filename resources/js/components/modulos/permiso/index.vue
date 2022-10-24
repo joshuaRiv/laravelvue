@@ -13,7 +13,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-tools">
-            <router-link class="btn btn-info btn-sm" :to="`/roles/crear`">
+            <router-link class="btn btn-info btn-sm" :to="`/permisos/crear`">
               <i class="fas fa-plus-square"></i> Nuevo Permiso
             </router-link>
           </div>
@@ -125,7 +125,7 @@ export default {
     return {
       fillBsqPermiso: {
         cNombre: '',
-        cUrl: '',
+        cSlug: '',
       },
       listPermisos: [],
       listPermisos: [],
@@ -164,7 +164,7 @@ export default {
   methods: {
     limpiarModal() {
       this.fillVerRol.cNombre = '';
-      this.fillVerRol.cUrl = '';
+      this.fillVerRol.cSlug = '';
       this.listPermisos = [];
       this.modalOption = 0;
     },

@@ -170,7 +170,7 @@
                             <div class="form-group-row">
                               <label class="col-md-12 col-form-label">Url Amigable</label>
                               <div class="col-md-12">
-                                <span class="form-control" v-text="fillVerRol.cUrl"></span>
+                                <span class="form-control" v-text="fillVerRol.cSlug"></span>
                               </div>
                             </div>
                           </div>
@@ -231,11 +231,11 @@ export default {
     return {
       fillBsqRol: {
         cNombre: '',
-        cUrl: '',
+        cSlug: '',
       },
       fillVerRol: {
         cNombre: '',
-        cUrl: '',
+        cSlug: '',
       },
       listRoles: [],
       listPermisos: [],
@@ -291,7 +291,7 @@ export default {
     },
     limpiarModal() {
       this.fillVerRol.cNombre = '';
-      this.fillVerRol.cUrl = '';
+      this.fillVerRol.cSlug = '';
       this.listPermisos = [];
       this.modalOption = 0;
     },
@@ -351,7 +351,7 @@ export default {
             case 'ver':
               // Setear info del arreglo
               this.fillVerRol.cNombre = data.name;
-              this.fillVerRol.cUrl = data.slug;
+              this.fillVerRol.cSlug = data.slug;
               // Obtener los permisos del rol seleccionado
               this.getListarPermisosByRol(data.id);
               break;
