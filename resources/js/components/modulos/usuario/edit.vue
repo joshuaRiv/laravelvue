@@ -217,13 +217,13 @@ export default {
     },
     getRolByUsuario() {
       const url = '/administracion/usuario/getRolByUsuario';
-      console.log(this.fillEditarUsuario.nIdUsuario);
       axios.get(url, {
         params: {
           'nIdUsuario': this.fillEditarUsuario.nIdUsuario,
         }
       }).then(res => {
-        console.log(res.data);
+        console.log('rol del usuario' + res.data);
+        this.fillEditarUsuario.nIdRol = (res.data.length == 0) ? '' : res.data[0].nIdRol;
         this.fullscreenLoading = false;
       });
     },
@@ -264,6 +264,15 @@ export default {
         'cContrasena': this.fillEditarUsuario.cContrasena,
         'oFotografia': nIdFile,
       }).then(res => {
+        this.setEditarRolByUsuario();
+      });
+    },
+    setEditarRolByUsuario() {
+      const url = '/administracion/usuario/setEditarRolByUsuario';
+      axios.post(url, {
+        'nIdUsuario': this.fillEditarUsuario.nIdUsuario,
+        'nIdRol': this.fillEditarUsuario.nIdRol,
+      }).then(res => {
         this.fullscreenLoading = false;
         Swal.fire({
           icon: 'success',
@@ -288,6 +297,9 @@ export default {
       }
       if (!this.fillEditarUsuario.cCorreo) {
         this.mensajeError.push("El correo es un campo obligatorio");
+      }
+      if (!this.fillEditarUsuario.nIdRol) {
+        this.mensajeError.push("El rol es un campo obligatorio");
       }
       if (this.mensajeError.length) {
         this.error = 1;

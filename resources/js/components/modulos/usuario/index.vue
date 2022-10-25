@@ -134,7 +134,7 @@
                               :to="{name:'usuario.editar', params:{id: usuario.id}}">
                               <i class="fas fa-pencil-alt"></i> Editar
                             </router-link>
-                            <router-link class="btn btn-flat btn-success btn-sm" :to="'/'">
+                            <router-link class="btn btn-flat btn-success btn-sm" :to="{name: 'usuario.permiso', params: {id: usuario.id}}">
                               <i class="fas fa-key"></i> Permiso
                             </router-link>
                             <!-- 1 desactivar -->

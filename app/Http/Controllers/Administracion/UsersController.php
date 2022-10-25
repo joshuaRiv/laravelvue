@@ -137,7 +137,7 @@ class UsersController extends Controller
         $nIdUsuario = $request->nIdUsuario;
         $nIdRol = $request->nIdRol;
 
-        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = '') : $nIdUsuario;
+        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = 0) : $nIdUsuario;
         $nIdRol = ($nIdRol == NULL) ? ($nIdRol = '') : $nIdRol;
     
         DB::select('call sp_Usuario_setEditarRolByUsuario (?,?)',
@@ -147,19 +147,89 @@ class UsersController extends Controller
         ]);
     }
 
-    // 29 - 8:10 | Res retorna html y no el valor
     public function getRolByUsuario(Request $request){
-        if (!$request->ajax()) return redirect('/');
+        if (!$request->ajax()) return '/';
 
         $nIdUsuario = $request->nIdUsuario;
 
-        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = '') : $nIdUsuario;
+        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = 0) : $nIdUsuario;
     
         $res = DB::select('call sp_Usuario_getRolByUsuario (?)',
         [
             $nIdUsuario,
         ]);
 
-        return $res[0]->nIdRol;
+        return $res;
+    }
+
+    public function getListarPermisosByRolAsignado(Request $request)
+    {
+        if (!$request->ajax()) return '/';
+
+        $nIdUsuario = $request->nIdUsuario;
+
+        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = 0) : $nIdUsuario;
+    
+        $res = DB::select('call sp_Usuario_getListarPermisosByRolAsignado (?)',
+        [
+            $nIdUsuario,
+        ]);
+
+        return $res;
+    }
+
+    public function getListarPermisosByUsuario(Request $request)
+    {
+        if (!$request->ajax()) return '/';
+
+        $nIdUsuario = $request->nIdUsuario;
+
+        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = 0) : $nIdUsuario;
+    
+        $res = DB::select('call sp_Usuario_getListarPermisosByUsuario (?)',
+        [
+            $nIdUsuario,
+        ]);
+
+        return $res;
+    }
+
+    public function setRegistrarPermisosByUsuario(Request $request)
+    {
+        if (!$request->ajax()) return '/';
+
+        $nIdUsuario = $request->nIdUsuario;
+
+        $nIdUsuario  = ($nIdUsuario == NULL)  ? ($nIdUsuario = 0) : $nIdUsuario;
+
+        try {
+            $res = DB::select(
+                'call sp_Usuario_setEliminarPermisosByUsuario (?)',
+                [
+                    $nIdUsuario,
+                ]
+            );
+            
+            DB::beginTransaction();
+            $listPermisos = $request->listPermisosFilter;
+            $listPermisosSize = sizeof($listPermisos);
+            if ($listPermisosSize > 0) {
+                foreach ($listPermisos as $key => $value) {
+                    if ($value['checked'] == true) {
+                        DB::select(
+                            'call sp_Usuario_setRegistrarPermisosByUsuario (?,?)',
+                            [
+                                $nIdUsuario,
+                                $value['id'],
+                            ]
+                        );
+                    }
+                }
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
     }
 }

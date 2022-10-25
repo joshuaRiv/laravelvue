@@ -12,6 +12,7 @@ import Usuario from './components/modulos/usuario/index';
 import UsuarioCreate from './components/modulos/usuario/create';
 import UsuarioEdit from './components/modulos/usuario/edit';
 import UsuarioView from './components/modulos/usuario/view';
+import UsuarioPermission from './components/modulos/usuario/permission';
 
 import Rol from './components/modulos/rol/index';
 import RolCreate from './components/modulos/rol/create';
@@ -62,6 +63,12 @@ export default new Router({
       path: '/usuarios/ver/:id',
       name:'usuario.ver',
       component: UsuarioView,
+      props: true,
+    },
+    {
+      path: '/usuarios/permiso/:id',
+      name:'usuario.permiso',
+      component: UsuarioPermission,
       props: true,
     },
 
