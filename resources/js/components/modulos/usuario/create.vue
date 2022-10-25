@@ -267,6 +267,9 @@ export default {
       if (!this.fillCreateUsuario.cContrasena) {
         this.mensajeError.push("La contraseña es un campo obligatorio");
       }
+      if (!this.fillCreateUsuario.nIdRol) {
+        this.mensajeError.push("La contraseña es un campo obligatorio");
+      }
       if (this.mensajeError.length) {
         this.error = 1;
       }

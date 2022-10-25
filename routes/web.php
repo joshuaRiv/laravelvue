@@ -11,6 +11,9 @@
 |
 */
 
+Route::post('/authenticate/login', 'Auth\LoginController@login');
+Route::post('/authenticate/logout', 'Auth\LoginController@logout');
+
 Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
 
 Route::get('/administracion/usuario/getListarUsuarios', 'Administracion\UsersController@getListarUsuarios');

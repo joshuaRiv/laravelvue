@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar :ruta="ruta" />
-    <Sidebar :ruta="ruta" />
+    <Sidebar :ruta="ruta" :usuario="usuario"/>
 
     <!-- Routes -->
     <div class="content-wrapper">
@@ -24,7 +24,7 @@ import Sidebar from './plantilla/Sidebar';
 import Footer from './plantilla/Footer';
 
 export default {
-  props: ['ruta'],
+  props: ['ruta', 'usuario'],
   components: {
     Navbar,
     Sidebar,

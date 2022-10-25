@@ -22,52 +22,122 @@ import Permiso from './components/modulos/permiso/index';
 import PermisoCreate from './components/modulos/permiso/create';
 import PermisoEdit from './components/modulos/permiso/edit';
 
+import Login from './components/modulos/authenticate/login';
+
 Vue.use(Router)
 
 export default new Router({
-  routes:[
-    {path: '/', component: Dashboard},
-    {path: '/categorias', component: Categoria},
-    {path: '/clientes', component: Cliente},
-    {path: '/pedidos', component: Pedido},
-    {path: '/productos', component: Producto},
-    {path: '/reportes', component: Reporte},
+  routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+    },
+
+
+    {
+      path: '/',
+      name: 'dashboard.index',
+      component: Dashboard
+    },
+
     
-    {path: '/permisos', component: Permiso},
-    {path: '/permisos/crear', component: PermisoCreate},
+    { 
+      path: '/categorias',
+      name: 'categoria.index',
+      component: Categoria
+    },
+
+
+    { 
+      path: '/clientes',
+      name: 'cliente.index',
+      component: Cliente
+    },
+
+
+    { 
+      path: '/pedidos',
+      name: 'pedido.index',
+      component: Pedido
+    },
+    
+    
+    { 
+      path: '/productos',
+      name: 'producto.index',
+      component: Producto
+    },
+    
+    
+    { 
+      path: '/reportes',
+      name: 'reporte.index',
+      component: Reporte
+    },
+
+
+    { 
+      path: '/permisos',
+      name: 'permiso.index',
+      component: Permiso
+    },
+    { 
+      path: '/permisos/crear', 
+      name: 'permiso.crear',
+      component: PermisoCreate
+    },
     {
       path: '/permisos/editar/:id',
-      name:'permiso.editar', 
+      name: 'permiso.editar',
       component: PermisoEdit,
       props: true
     },
 
-    {path: '/roles', component: Rol},
-    {path: '/roles/crear', component: RolCreate},
+
+    { 
+      path: '/roles', 
+      name: 'rol.index',
+      component: Rol
+    },
+    { 
+      path: '/roles/crear',
+      name: 'rol.crear',
+      component: RolCreate
+    },
     {
       path: '/roles/editar/:id',
-      name:'rol.editar', 
+      name: 'rol.editar',
       component: RolEdit,
       props: true
     },
 
-    {path: '/usuarios', component: Usuario},
-    {path: '/usuarios/crear', component: UsuarioCreate},
+
+    { 
+      path: '/usuarios',
+      name: 'usuario.index',
+      component: Usuario
+    },
+    { 
+      path: '/usuarios/crear',
+      name: 'usuario.crear',
+      component: UsuarioCreate
+    },
     {
       path: '/usuarios/editar/:id',
-      name:'usuario.editar', 
+      name: 'usuario.editar',
       component: UsuarioEdit,
       props: true
     },
     {
       path: '/usuarios/ver/:id',
-      name:'usuario.ver',
+      name: 'usuario.ver',
       component: UsuarioView,
       props: true,
     },
     {
       path: '/usuarios/permiso/:id',
-      name:'usuario.permiso',
+      name: 'usuario.permiso',
       component: UsuarioPermission,
       props: true,
     },
