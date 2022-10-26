@@ -24,125 +24,212 @@ import PermisoEdit from './components/modulos/permiso/edit';
 
 import Login from './components/modulos/authenticate/login';
 
+import Undefined from './components/plantilla/404';
+
 Vue.use(Router)
 
+function verificarAcceso(to, from, next) {
+  console.log(from);
+  let authUser = JSON.parse(sessionStorage.getItem('authUser'));
+  if (authUser) {
+    // console.log('El usuario esta autenticado');
+    let listRolPermisosByUsuario = JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario'));
+    if (listRolPermisosByUsuario.includes(to.name)) {
+      next();
+    }
+    else {
+      let listRolPermisosByUsuarioFilter = [];
+      listRolPermisosByUsuario.map(function (x) {
+        if (x.includes('index')) {
+          listRolPermisosByUsuarioFilter.push(x);
+        }        
+      })
+      if (to.name == 'dashboard.index') {
+        next({name: listRolPermisosByUsuarioFilter[0]});
+      } else {
+        next(from.path);
+      }
+    }
+  }
+  else{
+    next('/login');
+  }
+}
+
+export const rutas = [
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+
+
+  {
+    path: '/',
+    name: 'dashboard.index',
+    component: Dashboard,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+
+
+  {
+    path: '/categorias',
+    name: 'categoria.index',
+    component: Categoria,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+
+
+  {
+    path: '/clientes',
+    name: 'cliente.index',
+    component: Cliente,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+
+
+  {
+    path: '/pedidos',
+    name: 'pedido.index',
+    component: Pedido,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+
+
+  {
+    path: '/productos',
+    name: 'producto.index',
+    component: Producto,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+
+
+  {
+    path: '/reportes',
+    name: 'reporte.pedido.index',
+    component: Reporte,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+
+
+  {
+    path: '/permisos',
+    name: 'permiso.index',
+    component: Permiso,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/permisos/crear',
+    name: 'permiso.crear',
+    component: PermisoCreate,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/permisos/editar/:id',
+    name: 'permiso.editar',
+    component: PermisoEdit,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true
+  },
+
+
+  {
+    path: '/roles',
+    name: 'rol.index',
+    component: Rol,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/roles/crear',
+    name: 'rol.crear',
+    component: RolCreate,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/roles/editar/:id',
+    name: 'rol.editar',
+    component: RolEdit,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true
+  },
+
+
+  {
+    path: '/usuarios',
+    name: 'usuario.index',
+    component: Usuario,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/usuarios/crear',
+    name: 'usuario.crear',
+    component: UsuarioCreate,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/usuarios/editar/:id',
+    name: 'usuario.editar',
+    component: UsuarioEdit,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true
+  },
+  {
+    path: '/usuarios/ver/:id',
+    name: 'usuario.ver',
+    component: UsuarioView,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true,
+  },
+  {
+    path: '/usuarios/permiso/:id',
+    name: 'usuario.permiso',
+    component: UsuarioPermission,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true,
+  },
+  {
+    path: '*',
+    component: Undefined,
+  },
+
+];
+
 export default new Router({
-  routes: [
-    {
-      path: '/login',
-      name: 'login',
-      component: Login,
-    },
-
-
-    {
-      path: '/',
-      name: 'dashboard.index',
-      component: Dashboard
-    },
-
-    
-    { 
-      path: '/categorias',
-      name: 'categoria.index',
-      component: Categoria
-    },
-
-
-    { 
-      path: '/clientes',
-      name: 'cliente.index',
-      component: Cliente
-    },
-
-
-    { 
-      path: '/pedidos',
-      name: 'pedido.index',
-      component: Pedido
-    },
-    
-    
-    { 
-      path: '/productos',
-      name: 'producto.index',
-      component: Producto
-    },
-    
-    
-    { 
-      path: '/reportes',
-      name: 'reporte.index',
-      component: Reporte
-    },
-
-
-    { 
-      path: '/permisos',
-      name: 'permiso.index',
-      component: Permiso
-    },
-    { 
-      path: '/permisos/crear', 
-      name: 'permiso.crear',
-      component: PermisoCreate
-    },
-    {
-      path: '/permisos/editar/:id',
-      name: 'permiso.editar',
-      component: PermisoEdit,
-      props: true
-    },
-
-
-    { 
-      path: '/roles', 
-      name: 'rol.index',
-      component: Rol
-    },
-    { 
-      path: '/roles/crear',
-      name: 'rol.crear',
-      component: RolCreate
-    },
-    {
-      path: '/roles/editar/:id',
-      name: 'rol.editar',
-      component: RolEdit,
-      props: true
-    },
-
-
-    { 
-      path: '/usuarios',
-      name: 'usuario.index',
-      component: Usuario
-    },
-    { 
-      path: '/usuarios/crear',
-      name: 'usuario.crear',
-      component: UsuarioCreate
-    },
-    {
-      path: '/usuarios/editar/:id',
-      name: 'usuario.editar',
-      component: UsuarioEdit,
-      props: true
-    },
-    {
-      path: '/usuarios/ver/:id',
-      name: 'usuario.ver',
-      component: UsuarioView,
-      props: true,
-    },
-    {
-      path: '/usuarios/permiso/:id',
-      name: 'usuario.permiso',
-      component: UsuarioPermission,
-      props: true,
-    },
-
-  ],
+  routes: rutas,
   mode: 'history',
   linkActiveClass: 'active',
 })

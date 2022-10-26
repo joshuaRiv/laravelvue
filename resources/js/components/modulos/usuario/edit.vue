@@ -222,7 +222,6 @@ export default {
           'nIdUsuario': this.fillEditarUsuario.nIdUsuario,
         }
       }).then(res => {
-        console.log('rol del usuario' + res.data);
         this.fillEditarUsuario.nIdRol = (res.data.length == 0) ? '' : res.data[0].nIdRol;
         this.fullscreenLoading = false;
       });

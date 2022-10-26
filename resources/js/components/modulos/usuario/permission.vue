@@ -135,6 +135,8 @@ export default {
       listPermisosByRolAsignado: [],
       listPermisos: [],
       listPermisosFilter: [],
+      listRolPermisosByUsuario: [],
+      listRolPermisosByUsuarioFilter: [],
       fullscreenLoading: false,
       modalShow: false,
       mostrarModal: {
@@ -229,14 +231,35 @@ export default {
         'nIdUsuario': this.fillPermiso.nIdUsuario,
         'listPermisosFilter': this.listPermisosFilter,
       }).then(res => {
-        this.fullscreenLoading = false;
+        this.getListarRolPermisosByUsuario();
+      });
+    },
+    getListarRolPermisosByUsuario() {
+      const ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
+
+      axios.get(ruta).then(
+        res => {
+          this.listRolPermisosByUsuario = res.data;
+          this.filterListarRolPermisosByUsuario();
+        }
+      );
+    },
+    filterListarRolPermisosByUsuario() {
+      let me = this;
+      me.listRolPermisosByUsuarioFilter = [];
+      me.listRolPermisosByUsuario.map(function (x) {
+        me.listRolPermisosByUsuarioFilter.push(x.slug);
+      });
+      // sessionStorage.clear();
+      sessionStorage.setItem('listRolPermisosByUsuario', JSON.stringify(me.listRolPermisosByUsuarioFilter));
+      EventBus.$emit('notifyRolPermisosByUsuario', me.listRolPermisosByUsuarioFilter);
+      this.fullscreenLoading = false;
         Swal.fire({
           icon: 'success',
           title: 'Se otorgaron los permisos al usuario correctamente',
           showConfirmButton: false,
           timer: 1500
         });
-      });
     },
     validarRegistrarPermisosByUsuario() {
       this.error = 0;

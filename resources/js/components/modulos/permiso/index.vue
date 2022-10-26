@@ -13,9 +13,11 @@
       <div class="card">
         <div class="card-header">
           <div class="card-tools">
-            <router-link class="btn btn-info btn-sm" :to="`/permisos/crear`">
-              <i class="fas fa-plus-square"></i> Nuevo Permiso
-            </router-link>
+            <template v-if="listRolPermisosByUsuario.includes('permiso.crear')">
+              <router-link class="btn btn-info btn-sm" :to="{name: 'permiso.crear'}">
+                <i class="fas fa-plus-square"></i> Nuevo Permiso
+              </router-link>
+            </template>
           </div>
         </div>
         <div class="card-body">
@@ -80,10 +82,12 @@
                         <td> {{ rol.name }} </td>
                         <td> {{ rol.slug }} </td>
                         <td>
-                          <router-link class="btn btn-flat btn-info btn-sm"
-                            :to="{ name: 'permiso.editar', params: { id: rol.id } }">
-                            <i class="fas fa-pencil-alt"></i> Editar
-                          </router-link>
+                          <template v-if="listRolPermisosByUsuario.includes('permiso.editar')">
+                            <router-link class="btn btn-flat btn-info btn-sm"
+                              :to="{ name: 'permiso.editar', params: { id: rol.id } }">
+                              <i class="fas fa-pencil-alt"></i> Editar
+                            </router-link>
+                          </template>
                         </td>
                       </tr>
                     </tbody>

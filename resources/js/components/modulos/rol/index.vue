@@ -13,9 +13,11 @@
       <div class="card">
         <div class="card-header">
           <div class="card-tools">
-            <router-link class="btn btn-info btn-sm" :to="`/roles/crear`">
-              <i class="fas fa-plus-square"></i> Nuevo Rol
-            </router-link>
+            <template v-if="listRolPermisosByUsuario.includes('rol.crear')">
+              <router-link class="btn btn-info btn-sm" :to="{name: 'rol.crear'}">
+                <i class="fas fa-plus-square"></i> Nuevo Rol
+              </router-link>
+            </template>
           </div>
         </div>
         <div class="card-body">
@@ -80,14 +82,18 @@
                         <td> {{ rol.name }} </td>
                         <td> {{ rol.slug }} </td>
                         <td>
-                          <button class="btn btn-flat btn-primary btn-sm"
-                            @click.prevent="abrirModalByOption('rol', 'ver', rol)">
-                            <i class="fas fa-folder"></i> Ver
-                          </button>
-                          <router-link class="btn btn-flat btn-info btn-sm"
-                            :to="{ name: 'rol.editar', params: { id: rol.id } }">
-                            <i class="fas fa-pencil-alt"></i> Editar
-                          </router-link>
+                          <template v-if="listRolPermisosByUsuario.includes('rol.ver')">
+                            <button class="btn btn-flat btn-primary btn-sm"
+                              @click.prevent="abrirModalByOption('rol', 'ver', rol)">
+                              <i class="fas fa-folder"></i> Ver
+                            </button>
+                          </template>
+                          <template v-if="listRolPermisosByUsuario.includes('rol.editar')">
+                            <router-link class="btn btn-flat btn-info btn-sm"
+                              :to="{ name: 'rol.editar', params: { id: rol.id } }">
+                              <i class="fas fa-pencil-alt"></i> Editar
+                            </router-link>
+                          </template>
                         </td>
                       </tr>
                     </tbody>
@@ -239,6 +245,7 @@ export default {
       },
       listRoles: [],
       listPermisos: [],
+      listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
       pageNumber: 0,
       perPage: 5,
       fullscreenLoading: false,

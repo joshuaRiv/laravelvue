@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar :ruta="ruta" />
-    <Sidebar :ruta="ruta" :usuario="authUser" />
+    <Sidebar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario" />
 
     <!-- Routes -->
     <div class="content-wrapper">
@@ -34,13 +34,18 @@ export default {
   data(){
     return {
       authUser: this.usuario,
+      listRolPermisosByUsuario: [],
     }
   },
   mounted() {
+    // console.log(JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')));
+    this.listRolPermisosByUsuario = JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario'));
+    
     EventBus.$on('verifyAuthenticatedUser', data => {
-      console.log('Evento ejecutado desde el Componente App.vue');
-      console.log(data);
       this.authUser = data;
+    });
+    EventBus.$on('notifyRolPermisosByUsuario', data => {
+      this.listRolPermisosByUsuario = data;
     });
   },
 }

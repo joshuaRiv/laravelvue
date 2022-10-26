@@ -13,9 +13,11 @@
       <div class="card">
         <div class="card-header">
           <div class="card-tools">
-            <router-link class="btn btn-info btn-sm" :to="`/usuarios/crear`">
-              <i class="fas fa-plus-square"></i> Nuevo usuario
-            </router-link>
+            <template v-if="listRolPermisosByUsuario.includes('usuario.crear')">
+              <router-link class="btn btn-info btn-sm" :to="{name: 'usuario.crear'}">
+                <i class="fas fa-plus-square"></i> Nuevo usuario
+              </router-link>
+            </template>
           </div>
         </div>
         <div class="card-body">
@@ -126,29 +128,40 @@
                           </template>
                         </td>
                         <td>
-                          <router-link class="btn btn-flat btn-primary btn-sm" :to="{name:'usuario.ver', params:{id: usuario.id}}">
-                            <i class="fas fa-folder"></i> Ver
-                          </router-link>
+                          <template v-if="listRolPermisosByUsuario.includes('usuario.ver')">
+                            <router-link class="btn btn-flat btn-primary btn-sm" :to="{name:'usuario.ver', params:{id: usuario.id}}">
+                              <i class="fas fa-folder"></i> Ver
+                            </router-link>
+                          </template>
+
                           <template v-if="usuario.state == 'A'">
-                            <router-link class="btn btn-flat btn-info btn-sm"
-                              :to="{name:'usuario.editar', params:{id: usuario.id}}">
-                              <i class="fas fa-pencil-alt"></i> Editar
-                            </router-link>
-                            <router-link class="btn btn-flat btn-success btn-sm" :to="{name: 'usuario.permiso', params: {id: usuario.id}}">
-                              <i class="fas fa-key"></i> Permiso
-                            </router-link>
+                            <template v-if="listRolPermisosByUsuario.includes('usuario.editar')">
+                              <router-link class="btn btn-flat btn-info btn-sm"
+                                :to="{name:'usuario.editar', params:{id: usuario.id}}">
+                                <i class="fas fa-pencil-alt"></i> Editar
+                              </router-link>
+                            </template>
+                            <template v-if="listRolPermisosByUsuario.includes('usuario.permiso')">
+                              <router-link class="btn btn-flat btn-success btn-sm" :to="{name: 'usuario.permiso', params: {id: usuario.id}}">
+                                <i class="fas fa-key"></i> Permiso
+                              </router-link>
+                            </template>
                             <!-- 1 desactivar -->
-                            <button class="btn btn-flat btn-danger btn-sm"
-                              @click="setCambiarEstadoUsuario(1, usuario.id)">
-                              <i class="fas fa-trash"></i> Desactivar
-                            </button>
+                            <template v-if="listRolPermisosByUsuario.includes('usuario.desactivar')">
+                              <button class="btn btn-flat btn-danger btn-sm"
+                                @click="setCambiarEstadoUsuario(1, usuario.id)">
+                                <i class="fas fa-trash"></i> Desactivar
+                              </button>
+                            </template>
                           </template>
                           <template v-else>
                             <!-- 2 activar -->
-                            <button class="btn btn-flat btn-danger btn-sm"
-                              @click="setCambiarEstadoUsuario(2, usuario.id)">
-                              <i class="fas fa-check"></i> Activar
-                            </button>
+                            <template v-if="listRolPermisosByUsuario.includes('usuario.activar')">
+                              <button class="btn btn-flat btn-danger btn-sm"
+                                @click="setCambiarEstadoUsuario(2, usuario.id)">
+                                <i class="fas fa-check"></i> Activar
+                              </button>
+                            </template>
                           </template>
                         </td>
                       </tr>
@@ -200,6 +213,7 @@ export default {
         { value: 'A', label: 'Activo' },
         { value: 'I', label: 'Inactivo' }
       ],
+      listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
       pageNumber: 0,
       perPage: 5,
       fullscreenLoading: false,
@@ -260,6 +274,8 @@ export default {
         this.inicializarPaginacion();
         this.listUsuarios = res.data;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
       });
     },
     nextPage() {

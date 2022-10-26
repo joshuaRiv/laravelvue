@@ -69,28 +69,28 @@
                     </h3>
                   </div>
                   <div class="card-body table-responsive">
-                    <template v-if="listPermisosFilter.length ">
+                    <template v-if="listPermisosFilter.length">
                       <div class="scrollTable">
-                      <table class="table table-hover table-head-fixed text-nowrap projects">
-                        <thead>
-                          <tr>
-                            <th>Acción</th>
-                            <th>Nombre</th>
-                            <th>Url Amigable</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="(rol, index) in listPermisosFilter" :key="index"
-                            @click.prevent="marcarFila(index)">
-                            <td>
-                              <el-checkbox v-model="rol.checked"></el-checkbox>
-                            </td>
-                            <td> {{ rol.name }} </td>
-                            <td> {{ rol.slug }} </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                        <table class="table table-hover table-head-fixed text-nowrap projects">
+                          <thead>
+                            <tr>
+                              <th>Acción</th>
+                              <th>Nombre</th>
+                              <th>Url Amigable</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(rol, index) in listPermisosFilter" :key="index"
+                              @click.prevent="marcarFila(index)">
+                              <td>
+                                <el-checkbox v-model="rol.checked"></el-checkbox>
+                              </td>
+                              <td> {{ rol.name }} </td>
+                              <td> {{ rol.slug }} </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </template>
                     <template v-else>
                       <div class="callout callout-info">
@@ -106,7 +106,7 @@
       </div>
     </div>
     <div class="toast-container top-0 end-0 p-2" v-for="error in mensajeError" :key="error">
-      <div class="toast fade bg-primary top-0 end-0" :class="{show: modalShow}"
+      <div class="toast fade bg-primary top-0 end-0" :class="{ show: modalShow }"
         :style="modalShow ? mostrarModal : ocultarModal">
         <div class="toast-header">
           <div class="rounded mr-2 bg-light" style="height: 20px; width: 20px"></div>
@@ -117,7 +117,7 @@
           </button>
         </div>
         <div class="toast-body p-3">
-          {{error}}
+          {{ error }}
         </div>
       </div>
     </div>
@@ -137,6 +137,8 @@ export default {
       },
       listPermisos: [],
       listPermisosFilter: [],
+      listRolPermisosByUsuario: [],
+      listRolPermisosByUsuarioFilter: [],
       fullscreenLoading: false,
       modalShow: false,
       mostrarModal: {
@@ -222,13 +224,34 @@ export default {
         'cSlug': this.fillEditarRol.cSlug,
         'listPermisosFilter': this.listPermisosFilter,
       }).then(res => {
-        this.fullscreenLoading = false;
-        Swal.fire({
-          icon: 'success',
-          title: 'Se actualizó el rol correctamente',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        this.getListarRolPermisosByUsuario();
+      });
+    },
+    getListarRolPermisosByUsuario() {
+      const ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
+
+      axios.get(ruta).then(
+        res => {
+          this.listRolPermisosByUsuario = res.data;
+          this.filterListarRolPermisosByUsuario();
+        }
+      );
+    },
+    filterListarRolPermisosByUsuario() {
+      let me = this;
+      me.listRolPermisosByUsuarioFilter = [];
+      me.listRolPermisosByUsuario.map(function (x) {
+        me.listRolPermisosByUsuarioFilter.push(x.slug);
+      });
+      // sessionStorage.clear();
+      sessionStorage.setItem('listRolPermisosByUsuario', JSON.stringify(me.listRolPermisosByUsuarioFilter));
+      EventBus.$emit('notifyRolPermisosByUsuario', me.listRolPermisosByUsuarioFilter);
+      this.fullscreenLoading = false;
+      Swal.fire({
+        icon: 'success',
+        title: 'Se actualizó el rol correctamente',
+        showConfirmButton: false,
+        timer: 1500
       });
     },
     validarEditarRolPermisos() {
