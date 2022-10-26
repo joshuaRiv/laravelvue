@@ -13,6 +13,9 @@
 
 Route::post('/authenticate/login', 'Auth\LoginController@login');
 Route::post('/authenticate/logout', 'Auth\LoginController@logout');
+Route::get('/authenticate/getRefrescarUsuarioAutenticado', function(){
+    return Auth::user()->load('file');
+});
 
 Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
 

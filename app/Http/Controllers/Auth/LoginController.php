@@ -13,7 +13,7 @@ class LoginController extends Controller
         $cEmail = $request->cEmail;
         $cContrasena = $request->cContrasena;
 
-        $res = Auth::attempt(['email' => $cEmail, 'password' => $cContrasena]);
+        $res = Auth::attempt(['email' => $cEmail, 'password' => $cContrasena, 'state' => 'A']);
 
         return $res ? 
             response()->json([

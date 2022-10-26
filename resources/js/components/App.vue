@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar :ruta="ruta" />
-    <Sidebar :ruta="ruta" :usuario="usuario"/>
+    <Sidebar :ruta="ruta" :usuario="authUser" />
 
     <!-- Routes -->
     <div class="content-wrapper">
@@ -22,6 +22,7 @@
 import Navbar from './plantilla/Navbar';
 import Sidebar from './plantilla/Sidebar';
 import Footer from './plantilla/Footer';
+import { EventBus } from '../app';
 
 export default {
   props: ['ruta', 'usuario'],
@@ -29,7 +30,19 @@ export default {
     Navbar,
     Sidebar,
     Footer,
-  }
+  },
+  data(){
+    return {
+      authUser: this.usuario,
+    }
+  },
+  mounted() {
+    EventBus.$on('verifyAuthenticatedUser', data => {
+      console.log('Evento ejecutado desde el Componente App.vue');
+      console.log(data);
+      this.authUser = data;
+    });
+  },
 }
 </script>
 

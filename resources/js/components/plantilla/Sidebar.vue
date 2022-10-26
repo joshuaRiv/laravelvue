@@ -13,16 +13,24 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img :src="ruta + `/img/photo1.png`" class="img-circle elevation-2" alt="Joshua Rivera">
+          <template v-if="!usuario.file_id">
+            <img :src="ruta + `/img/photo1.png`" class="img-circle elevation-2" :alt="usuario.fullname">
+          </template>
+          <template v-else>
+            <img :src="usuario.file.path" class="img-circle elevation-2" :alt="usuario.fullname" style="height:34px !important;">
+          </template>
         </div>
         <div class="info">
-          <a href="#" class="d-block">Joshua Rivera</a>
+          <router-link class="d-block" :to="{ name: 'usuario.ver', params: { id: usuario.id } }">
+            {{ usuario.fullname }}
+          </router-link>
         </div>
       </div>
 
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="info">
-          <button href="#" class="btn btn-flat text-white w-full" @click.prevent="logout" v-loading.fullscreen.lock="fullscreenLoading">
+          <button href="#" class="btn btn-flat text-white w-full" @click.prevent="logout"
+            v-loading.fullscreen.lock="fullscreenLoading">
             <i class="fas  fa-sign-out-alt" /> Cerrar Sesión
           </button>
         </div>
@@ -114,7 +122,7 @@
 import Axios from 'axios';
 
 export default {
-  props: ['ruta'],
+  props: ['ruta', 'usuario'],
   data() {
     return {
       fullscreenLoading: false,

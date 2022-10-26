@@ -280,6 +280,17 @@ export default {
         'cContrasena': this.fillEditarUsuario.cContrasena,
         'oFotografia': nIdFile,
       }).then(res => {
+        this.getRefrescarUsuarioAutenticado();
+      });
+      } catch (error) {
+        throw error;
+      }
+    },
+    getRefrescarUsuarioAutenticado(){
+      const url = '/authenticate/getRefrescarUsuarioAutenticado';
+      axios.get(url).then(res =>{
+        // console.log(res.data);
+        EventBus.$emit('verifyAuthenticatedUser', res.data);
         this.fullscreenLoading = false;
         this.getUsuarioById();
         Swal.fire({
@@ -289,9 +300,6 @@ export default {
           timer: 1500
         });
       });
-      } catch (error) {
-        throw error;
-      }
     },
     validarRegistrarUsuario() {
       this.error = 0;

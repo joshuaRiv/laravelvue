@@ -15,7 +15,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
 import Swal from 'sweetalert2';
+import Vue from 'vue';
 window.Swal = Swal;
+
+export const EventBus = new Vue();
+window.EventBus = EventBus;
 
 Vue.component('App', require('./components/App.vue').default);
 Vue.component('Auth', require('./components/Auth.vue').default);
