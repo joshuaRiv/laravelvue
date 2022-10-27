@@ -132,7 +132,7 @@ export default {
         cSlug: '',
       },
       listPermisos: [],
-      listPermisos: [],
+      listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
       pageNumber: 0,
       perPage: 5,
       fullscreenLoading: false,

@@ -2,7 +2,6 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import Dashboard from './components/modulos/dashboard/index';
-import Categoria from './components/modulos/categoria/index';
 import Cliente from './components/modulos/cliente/index';
 import Pedido from './components/modulos/pedido/index';
 import Producto from './components/modulos/producto/index';
@@ -24,12 +23,14 @@ import PermisoEdit from './components/modulos/permiso/edit';
 
 import Login from './components/modulos/authenticate/login';
 
+import Categoria from './components/modulos/categoria/index';
+import CategoriaCreate from './components/modulos/categoria/create';
+
 import Undefined from './components/plantilla/404';
 
 Vue.use(Router)
 
 function verificarAcceso(to, from, next) {
-  console.log(from);
   let authUser = JSON.parse(sessionStorage.getItem('authUser'));
   if (authUser) {
     // console.log('El usuario esta autenticado');
@@ -78,6 +79,14 @@ export const rutas = [
     path: '/categorias',
     name: 'categoria.index',
     component: Categoria,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/categorias',
+    name: 'categoria.crear',
+    component: CategoriaCreate,
     beforeEnter: (to, from, next) => {
       verificarAcceso(to, from, next);
     }

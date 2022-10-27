@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group-row">
-                        <label class="col-md-3 col-form-label">Categoria</label>
+                        <label class="col-md-3 col-form-label">Descripción</label>
                         <div class="col-md-9">
                           <input v-model="fillBsqCategoria.cDescripcion" @keyup.enter="getListarCategorias" type="text"
                             class="form-control">
@@ -143,17 +143,17 @@ export default {
   computed: {
     //obtener el numero de paginas
     pageCount() {
-      let a = this.listUsuarios.length,
+      let a = this.listCategorias.length,
         b = this.perPage;
       return Math.ceil(a / b);
     },
     listarCategoriasPaginated() {
       let inicio = this.pageNumber * this.perPage,
         fin = inicio + this.perPage;
-      return this.listUsuarios.slice(inicio, fin);
+      return this.listCategorias.slice(inicio, fin);
     },
     pagesList() {
-      let a = this.listUsuarios.length,
+      let a = this.listCategorias.length,
         b = this.perPage;
       let pageTotal = Math.ceil(a / b);
 
@@ -173,7 +173,7 @@ export default {
       this.fillBsqCategoria.cDescripcion = '';
     },
     limpiarBandejaUsuarios() {
-      this.listUsuarios = [];
+      this.listCategorias = [];
     },
     getListarCategorias() {
       this.fullscreenLoading = true;
@@ -186,7 +186,7 @@ export default {
         }
       }).then(res => {
         this.inicializarPaginacion();
-        this.listUsuarios = res.data;
+        this.listCategorias = res.data;
         this.fullscreenLoading = false;
       }).catch(error => {
         console.log(error.response);
