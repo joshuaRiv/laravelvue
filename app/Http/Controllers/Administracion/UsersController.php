@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
@@ -52,6 +53,7 @@ class UsersController extends Controller
         $cCorreo = $request->cCorreo;
         $cContrasena = Hash::make($request->cContrasena);
         $oFotografia = $request->oFotografia;
+        $nIdAuthUser = Auth::id();
 
         $cPrimerNombre  = ($cPrimerNombre == NULL)  ? ($cPrimerNombre = '') : $cPrimerNombre;
         $cSegundoNombre = ($cSegundoNombre == NULL) ? ($cSegundoNombre = '') : $cSegundoNombre;
@@ -61,7 +63,7 @@ class UsersController extends Controller
         $cContrasena    = ($cContrasena == NULL)  ? ($cContrasena = '') : $cContrasena;
         $oFotografia    = ($oFotografia == NULL)  ? ($oFotografia = NULL) : $oFotografia;
     
-        $res = DB::select('call sp_Usuario_setRegistrarUsuario (?,?,?,?,?,?,?)',
+        $res = DB::select('call sp_Usuario_setRegistrarUsuario (?,?,?,?,?,?,?,?)',
         [
             $cPrimerNombre,
             $cSegundoNombre,
@@ -70,6 +72,7 @@ class UsersController extends Controller
             $cCorreo,
             $cContrasena,
             $oFotografia,
+            $nIdAuthUser,
         ]);
 
         return $res[0]->nIdUsuario;
@@ -91,6 +94,7 @@ class UsersController extends Controller
             $cContrasena = Hash::make($cContrasena);
         }
         $oFotografia = $request->oFotografia;
+        $nIdAuthUser = Auth::id();
 
         $nIdUsuario     = ($nIdUsuario == NULL)  ? ($nIdUsuario = '') : $nIdUsuario;
         $cPrimerNombre = ($cPrimerNombre == NULL)  ? ($cPrimerNombre = '') : $cPrimerNombre;
@@ -101,7 +105,7 @@ class UsersController extends Controller
         $cContrasena = ($cContrasena == NULL)  ? ($cContrasena = '') : $cContrasena;
         $oFotografia = ($oFotografia == NULL)  ? ($oFotografia = NULL) : $oFotografia;
     
-        DB::select('call sp_Usuario_setEditarUsuario (?,?,?,?,?,?,?,?)',
+        DB::select('call sp_Usuario_setEditarUsuario (?,?,?,?,?,?,?,?,?)',
         [
             $nIdUsuario,
             $cPrimerNombre,
@@ -111,6 +115,7 @@ class UsersController extends Controller
             $cCorreo,
             $cContrasena,
             $oFotografia,
+            $nIdAuthUser,
         ]);
     }
 
@@ -120,14 +125,16 @@ class UsersController extends Controller
 
         $nIdUsuario = $request->nIdUsuario;
         $cEstado = $request->cEstado;
+        $nIdAuthUser = Auth::id();
         
         $nIdUsuario     = ($nIdUsuario == NULL)  ? ($nIdUsuario = 0) : $nIdUsuario;
         $cEstado     = ($cEstado == NULL)  ? ($cEstado = 0) : $cEstado;
 
-        DB::select('call sp_Usuario_setCambiarEstadoUsuario (?,?)',
+        DB::select('call sp_Usuario_setCambiarEstadoUsuario (?,?,?)',
         [
             $nIdUsuario,
             $cEstado,
+            $nIdAuthUser,
         ]);
     }
 

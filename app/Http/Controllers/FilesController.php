@@ -14,14 +14,16 @@ class FilesController extends Controller
         $bandera = str_random(10);
         $filename = $file->getClientOriginalName();
         $fileserver = $bandera . '_' . $filename;
+        $nIdAuthUser = Auth::id();
 
         Storage::putFileAs('public/users', $file, $fileserver);
 
         $res = DB::select(
-            'call sp_Archvio_setRegistrarArchivo (?,?)',
+            'call sp_Archvio_setRegistrarArchivo (?,?, ?)',
             [
                 asset('storage/users/'.$fileserver),
                 $filename,
+                $nIdAuthUser,
             ]
         );
 
