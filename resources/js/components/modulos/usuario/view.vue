@@ -208,6 +208,14 @@ export default {
         this.getUsuarioVer(res.data[0]);
 
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     getUsuarioEditar({ fullname, firstname, secondname, lastname, username, email }) {
@@ -237,6 +245,14 @@ export default {
       }).then(res => {
         this.fillVerUsuario.cNombreRol = (res.data.length == 0) ? '' : res.data[0].name;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     abrirModal() {
@@ -265,11 +281,19 @@ export default {
       axios.post(url, this.form, config).then(res => {
         let nIdFile = res.data[0].nIdFile;
         this.setGuardarUsuario(nIdFile);
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     setGuardarUsuario(nIdFile) {
       let url = '/administracion/usuario/setEditarUsuario';
-      try {
+
         axios.post(url, {
         'nIdUsuario': this.fillEditarUsuario.nIdUsuario,
         'cPrimerNombre': this.fillEditarUsuario.cPrimerNombre,
@@ -281,10 +305,15 @@ export default {
         'oFotografia': nIdFile,
       }).then(res => {
         this.getRefrescarUsuarioAutenticado();
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
-      } catch (error) {
-        throw error;
-      }
     },
     getRefrescarUsuarioAutenticado(){
       const url = '/authenticate/getRefrescarUsuarioAutenticado';
@@ -299,6 +328,14 @@ export default {
           showConfirmButton: false,
           timer: 1500
         });
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     validarRegistrarUsuario() {

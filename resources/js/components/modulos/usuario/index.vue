@@ -14,7 +14,7 @@
         <div class="card-header">
           <div class="card-tools">
             <template v-if="listRolPermisosByUsuario.includes('usuario.crear')">
-              <router-link class="btn btn-info btn-sm" :to="{name: 'usuario.crear'}">
+              <router-link class="btn btn-info btn-sm" :to="{ name: 'usuario.crear' }">
                 <i class="fas fa-plus-square"></i> Nuevo usuario
               </router-link>
             </template>
@@ -88,7 +88,7 @@
                 </h3>
               </div>
               <div class="card-body table-responsive">
-                <template v-if="listarUsuariosPaginated.length ">
+                <template v-if="listarUsuariosPaginated.length">
                   <table class="table table-hover table-head-fixed text-nowrap projects">
                     <thead>
                       <tr>
@@ -129,7 +129,8 @@
                         </td>
                         <td>
                           <template v-if="listRolPermisosByUsuario.includes('usuario.ver')">
-                            <router-link class="btn btn-flat btn-primary btn-sm" :to="{name:'usuario.ver', params:{id: usuario.id}}">
+                            <router-link class="btn btn-flat btn-primary btn-sm"
+                              :to="{ name: 'usuario.ver', params: { id: usuario.id } }">
                               <i class="fas fa-folder"></i> Ver
                             </router-link>
                           </template>
@@ -137,12 +138,13 @@
                           <template v-if="usuario.state == 'A'">
                             <template v-if="listRolPermisosByUsuario.includes('usuario.editar')">
                               <router-link class="btn btn-flat btn-info btn-sm"
-                                :to="{name:'usuario.editar', params:{id: usuario.id}}">
+                                :to="{ name: 'usuario.editar', params: { id: usuario.id } }">
                                 <i class="fas fa-pencil-alt"></i> Editar
                               </router-link>
                             </template>
                             <template v-if="listRolPermisosByUsuario.includes('usuario.permiso')">
-                              <router-link class="btn btn-flat btn-success btn-sm" :to="{name: 'usuario.permiso', params: {id: usuario.id}}">
+                              <router-link class="btn btn-flat btn-success btn-sm"
+                                :to="{ name: 'usuario.permiso', params: { id: usuario.id } }">
                                 <i class="fas fa-key"></i> Permiso
                               </router-link>
                             </template>
@@ -172,7 +174,7 @@
                       <li class="page-item" v-if="pageNumber > 0">
                         <a href="#" class="page-link" @click.prevent="prevPage">Ant</a>
                       </li>
-                      <li class="page-item" v-for="(pagina , index) in pagesList" :key="index"
+                      <li class="page-item" v-for="(pagina, index) in pagesList" :key="index"
                         :class="[pagina == pageNumber ? 'active' : '']">
                         <a href="#" class="page-link" @click.prevent="selectPage(pagina)">{{ pagina + 1 }}</a>
                       </li>
@@ -219,7 +221,7 @@ export default {
       fullscreenLoading: false,
     }
   },
-  mounted(){
+  mounted() {
     this.getListarUsuarios();
   },
   computed: {
@@ -274,8 +276,14 @@ export default {
         this.inicializarPaginacion();
         this.listUsuarios = res.data;
         this.fullscreenLoading = false;
-      }).catch(error=>{
+      }).catch(error => {
         console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     nextPage() {
@@ -292,7 +300,7 @@ export default {
     },
     setCambiarEstadoUsuario(op, id) {
       Swal.fire({
-        title: '¿Está seguro de ' + ((op == 1) ? 'desactivar' : 'activar')+ ' el usuario?',
+        title: '¿Está seguro de ' + ((op == 1) ? 'desactivar' : 'activar') + ' el usuario?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -316,6 +324,14 @@ export default {
                 cancelButtonText: 'Cancelar'
               });
               this.getListarUsuarios();
+            }).catch(error => {
+              console.log(error.response);
+              if (error.response.status == 401) {
+                this.$router.push({ name: 'login' });
+                location.reload();
+                sessionStorage.clear();
+                this.fullscreenLoading = false;
+              }
             });
         }
       })
@@ -325,11 +341,11 @@ export default {
 </script>
 
 <style>
-  .position-reverse{
-    flex-direction: row-reverse !important;
-  }
+.position-reverse {
+  flex-direction: row-reverse !important;
+}
 
-  .img-max-height{
-    max-height: 100px !important;
-  }
+.img-max-height {
+  max-height: 100px !important;
+}
 </style>

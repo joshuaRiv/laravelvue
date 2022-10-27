@@ -192,6 +192,14 @@ export default {
         this.fillEditarUsuario.cUsuario = res.data[0].username;
         this.fillEditarUsuario.cCorreo = res.data[0].email;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     limpiarCriteriosBsq() {
@@ -213,6 +221,14 @@ export default {
         this.listRoles = res.data;
         this.fullscreenLoading = false;
         this.getRolByUsuario();
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     getRolByUsuario() {
@@ -224,6 +240,14 @@ export default {
       }).then(res => {
         this.fillEditarUsuario.nIdRol = (res.data.length == 0) ? '' : res.data[0].nIdRol;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     getFile(e) {
@@ -249,6 +273,14 @@ export default {
       axios.post(url, this.form, config).then(res => {
         let nIdFile = res.data[0].nIdFile;
         this.setGuardarUsuario(nIdFile);
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     setGuardarUsuario(nIdFile) {
@@ -264,6 +296,14 @@ export default {
         'oFotografia': nIdFile,
       }).then(res => {
         this.setEditarRolByUsuario();
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     setEditarRolByUsuario() {
@@ -279,6 +319,14 @@ export default {
           showConfirmButton: false,
           timer: 1500
         })
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     validarRegistrarUsuario() {

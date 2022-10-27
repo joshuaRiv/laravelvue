@@ -95,7 +95,7 @@ export default {
           this.getListarRolPermisosByUsuario(res.data.authUser);
         }
         this.fullscreenLoading = false;
-      })
+      });
     },
     getListarRolPermisosByUsuario(authUser) {
       const ruta = '/administracion/usuario/getListarRolPermisosByUsuario';

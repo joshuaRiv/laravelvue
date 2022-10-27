@@ -132,6 +132,14 @@ export default {
         this.fillEditarPermiso.cNombre = res.data[0].name;
         this.fillEditarPermiso.cSlug = res.data[0].slug;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     setEditarPermisos() {
@@ -155,6 +163,14 @@ export default {
           showConfirmButton: false,
           timer: 1500
         });
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     validarEditarPermisos() {

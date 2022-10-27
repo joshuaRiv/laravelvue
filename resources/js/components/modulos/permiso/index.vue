@@ -192,6 +192,14 @@ export default {
         this.inicializarPaginacion();
         this.listPermisos = res.data;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     nextPage() {

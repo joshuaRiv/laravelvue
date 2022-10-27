@@ -176,7 +176,15 @@ export default {
         res => {
           this.listPermisosByRolAsignado = res.data;
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     getListarPermisosByUsuario() {
       const ruta = '/administracion/usuario/getListarPermisosByUsuario';
@@ -190,7 +198,15 @@ export default {
           this.listPermisos = res.data;
           this.filterPermisosByUsuario();
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     getRolByUsuario() {
       const url = '/administracion/usuario/getRolByUsuario';
@@ -201,6 +217,14 @@ export default {
       }).then(res => {
         this.fillPermiso.cNombreRol = (res.data.length == 0) ? '' : res.data[0].name;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     filterPermisosByUsuario() {
@@ -232,6 +256,14 @@ export default {
         'listPermisosFilter': this.listPermisosFilter,
       }).then(res => {
         this.getListarRolPermisosByUsuario();
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     getListarRolPermisosByUsuario() {
@@ -242,7 +274,15 @@ export default {
           this.listRolPermisosByUsuario = res.data;
           this.filterListarRolPermisosByUsuario();
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     filterListarRolPermisosByUsuario() {
       let me = this;

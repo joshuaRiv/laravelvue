@@ -170,7 +170,15 @@ export default {
           this.listPermisos = res.data;
           this.filterPermisosByRol();
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     filterPermisosByRol() {
       let me = this;
@@ -203,6 +211,14 @@ export default {
       }).then(res => {
         this.fullscreenLoading = false;
         this.$router.push('/roles');
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     validarRegistrarRolPermisos() {

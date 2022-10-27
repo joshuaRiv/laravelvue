@@ -322,6 +322,14 @@ export default {
         this.inicializarPaginacion();
         this.listRoles = res.data;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     nextPage() {
@@ -349,7 +357,15 @@ export default {
           this.modalShow = true;
           this.modalOption = 2;
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     abrirModalByOption(modulo, accion, data) {
       switch (modulo) {

@@ -178,6 +178,14 @@ export default {
         this.fillEditarRol.cNombre = res.data[0].name;
         this.fillEditarRol.cSlug = res.data[0].slug;
         this.fullscreenLoading = false;
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     getListarPermisosByRol() {
@@ -192,7 +200,15 @@ export default {
           this.listPermisos = res.data;
           this.filterPermisosByRol();
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     filterPermisosByRol() {
       let me = this;
@@ -225,6 +241,14 @@ export default {
         'listPermisosFilter': this.listPermisosFilter,
       }).then(res => {
         this.getListarRolPermisosByUsuario();
+      }).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
       });
     },
     getListarRolPermisosByUsuario() {
@@ -235,7 +259,15 @@ export default {
           this.listRolPermisosByUsuario = res.data;
           this.filterListarRolPermisosByUsuario();
         }
-      );
+      ).catch(error=>{
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     filterListarRolPermisosByUsuario() {
       let me = this;
