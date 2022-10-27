@@ -43,16 +43,16 @@ function verificarAcceso(to, from, next) {
       listRolPermisosByUsuario.map(function (x) {
         if (x.includes('index')) {
           listRolPermisosByUsuarioFilter.push(x);
-        }        
+        }
       })
       if (to.name == 'dashboard.index') {
-        next({name: listRolPermisosByUsuarioFilter[0]});
+        next({ name: listRolPermisosByUsuarioFilter[0] });
       } else {
         next(from.path);
       }
     }
   }
-  else{
+  else {
     next('/login');
   }
 }
@@ -61,7 +61,16 @@ export const rutas = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter(to, from, next) {
+      let authUser = JSON.parse(sessionStorage.getItem('authUser'));
+      if (authUser) { 
+        next({name: 'dashboard.index'});
+      }
+      else{
+        next();
+      }
+    }
   },
 
 
