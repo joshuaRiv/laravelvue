@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Usuario</h1>
+            <h1 class="m-0 text-dark">Categorías</h1>
           </div>
         </div>
       </div>
@@ -77,13 +77,13 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(usuario, index) in listarCategoriasPaginated" :key="index">
-                        <td> {{ usuario.name }} </td>
-                        <td> {{ usuario.description }} </td>
+                      <tr v-for="(categoria, index) in listarCategoriasPaginated" :key="index">
+                        <td> {{ categoria.name }} </td>
+                        <td> {{ categoria.description }} </td>
                         <td>
                           <template v-if="listRolPermisosByUsuario.includes('categoria.editar')">
                             <router-link class="btn btn-flat btn-info btn-sm"
-                              :to="{ name: 'categoria.editar', params: { id: usuario.id } }">
+                              :to="{ name: 'categoria.editar', params: { id: categoria.id } }">
                               <i class="fas fa-pencil-alt"></i> Editar
                             </router-link>
                           </template>

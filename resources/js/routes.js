@@ -25,6 +25,7 @@ import Login from './components/modulos/authenticate/login';
 
 import Categoria from './components/modulos/categoria/index';
 import CategoriaCreate from './components/modulos/categoria/create';
+import CategoriaEdit from './components/modulos/categoria/edit';
 
 import Undefined from './components/plantilla/404';
 
@@ -99,6 +100,15 @@ export const rutas = [
     beforeEnter: (to, from, next) => {
       verificarAcceso(to, from, next);
     }
+  },
+  {
+    path: '/categorias/editar/:id',
+    name: 'categoria.editar',
+    component: CategoriaEdit,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true,
   },
 
 
