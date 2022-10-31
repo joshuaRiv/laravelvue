@@ -185,6 +185,7 @@ export default {
   },
   mounted() {
     this.getListarCategorias();
+    this.getListarProductos();
   },
   methods: {
     limpiarCriteriosBsq() {
