@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Controllers\Configuracion;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
+class ProductsController extends Controller
+{
+    public function getListarProductos(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdProducto = $request->nIdProducto;
+        $cNombre = $request->cNombre;
+        $cDescripcion = $request->cDescripcion;
+        $nIdCategoria = $request->nIdCategoria;
+
+        $nIdProducto = ($nIdProducto == NULL)  ? ($nIdProducto = 0) : $nIdProducto;
+        $cNombre = ($cNombre == NULL)  ? ($cNombre = '') : $cNombre;
+        $cDescripcion = ($cDescripcion == NULL) ? ($cDescripcion = '') : $cDescripcion;
+        $nIdCategoria = ($nIdCategoria == NULL)  ? ($nIdCategoria = 0) : $nIdCategoria;
+
+        $res = DB::select(
+            'call sp_Producto_getListarProductos (?,?,?,?)',
+            [
+                $nIdProducto,
+                $cNombre,
+                $cDescripcion,
+                $nIdCategoria,
+            ]
+        );
+
+        return $res;
+    }
+}
