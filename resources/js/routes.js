@@ -4,7 +4,6 @@ import Router from "vue-router";
 import Dashboard from './components/modulos/dashboard/index';
 import Cliente from './components/modulos/cliente/index';
 import Pedido from './components/modulos/pedido/index';
-import Producto from './components/modulos/producto/index';
 import Reporte from './components/modulos/reporte/index';
 
 import Usuario from './components/modulos/usuario/index';
@@ -26,6 +25,10 @@ import Login from './components/modulos/authenticate/login';
 import Categoria from './components/modulos/categoria/index';
 import CategoriaCreate from './components/modulos/categoria/create';
 import CategoriaEdit from './components/modulos/categoria/edit';
+
+import Producto from './components/modulos/producto/index';
+import ProductoCrear from './components/modulos/producto/create';
+import ProductoEditar from './components/modulos/producto/edit';
 
 import Undefined from './components/plantilla/404';
 
@@ -126,16 +129,6 @@ export const rutas = [
     path: '/pedidos',
     name: 'pedido.index',
     component: Pedido,
-    beforeEnter: (to, from, next) => {
-      verificarAcceso(to, from, next);
-    }
-  },
-
-
-  {
-    path: '/productos',
-    name: 'producto.index',
-    component: Producto,
     beforeEnter: (to, from, next) => {
       verificarAcceso(to, from, next);
     }
@@ -249,6 +242,35 @@ export const rutas = [
     },
     props: true,
   },
+  
+
+  {
+    path: '/productos',
+    name: 'producto.index',
+    component: Producto,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/productos/crear',
+    name: 'producto.crear',
+    component: ProductoCrear,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/productos/editar/:id',
+    name: 'producto.editar',
+    component: ProductoEditar,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    },
+    props: true,
+  },
+
+
   {
     path: '*',
     component: Undefined,

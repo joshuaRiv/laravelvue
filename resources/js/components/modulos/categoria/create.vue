@@ -53,8 +53,7 @@
               <div class="card-footer">
                 <div class="row">
                   <div class="col-md-4 offset-4">
-                    <button class="btn btnWidth btn-info btn-flat" @click="setRegistrarCategoria"
-                      v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
+                    <button class="btn btnWidth btn-info btn-flat" @click="setRegistrarCategoria" v-loading.fullscreen.lock="fullscreenLoading">Registrar</button>
                     <button class="btn btnWidth btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
                   </div>
                 </div>

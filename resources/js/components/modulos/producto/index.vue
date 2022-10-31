@@ -15,7 +15,7 @@
           <div class="card-tools">
             <template v-if="listRolPermisosByUsuario.includes('producto.crear')">
               <router-link class="btn btn-info btn-sm" :to="{ name: 'producto.crear' }">
-                <i class="fas fa-plus-square"></i> Nueva producto
+                <i class="fas fa-plus-square"></i> Nuevo Producto
               </router-link>
             </template>
           </div>
@@ -155,9 +155,6 @@ export default {
       fullscreenLoading: false,
     }
   },
-  mounted() {
-    this.getListarCategorias();
-  },
   computed: {
     //obtener el numero de paginas
     pageCount() {
@@ -185,6 +182,9 @@ export default {
 
       return pagesArray;
     },
+  },
+  mounted() {
+    this.getListarCategorias();
   },
   methods: {
     limpiarCriteriosBsq() {
