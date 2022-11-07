@@ -7,23 +7,25 @@
         <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="../../index3.html" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link">Contact</a>
-        </li>
+        <template v-if="listPermisos.includes('dashboard.index')">
+          <li class="nav-item d-none d-sm-inline-block">
+            <router-link class="nav-link" :to="{ name: 'dashboard.index' }">Inicio</router-link>
+          </li>
+        </template>
+        <template v-if="listPermisos.includes('pedido.index')">
+          <li class="nav-item d-none d-sm-inline-block">
+            <router-link class="nav-link" :to="{ name: 'pedido.index' }">Pedido</router-link>
+          </li>
+        </template>
       </ul>
 
       <!-- SEARCH FORM -->
       <form class="form-inline ml-3">
         <div class="input-group input-group-sm">
-          <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-navbar" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
+          <el-autocomplete class="inline-input" v-model="state2" :fetch-suggestions="querySearch"
+            placeholder="Buscar..." :trigger-on-focus="false" @select="handleSelect">
+            <i class="el-icon-search el-input__icon" slot="suffix" />
+          </el-autocomplete>
         </div>
       </form>
 
@@ -126,8 +128,72 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
-  props: ['ruta'],
-  name: 'Navbar',
+  props: ["ruta", 'usuario', "listPermisos"],
+  data() {
+    return {
+      links: [],
+      state2: "",
+    };
+  },
+  methods: {
+    querySearch(queryString, cb) {
+      var links = this.links;
+      var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      // call callback function to return suggestion objects
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (link) => {
+        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    loadAll() {
+      return [
+        { "value": "vue", "link": "https://github.com/vuejs/vue" },
+        { "value": "element", "link": "https://github.com/ElemeFE/element" },
+        { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
+        { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
+        { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
+        { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
+        { "value": "babel", "link": "https://github.com/babel/babel" }
+      ];
+    },
+    getListarRolPermisosByUsuario() {
+      const ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
+
+      axios.get(ruta, {
+        params: {
+          'nIdUsuario': usuario.id,
+        }
+      }).then(
+        res => {
+          this.listRolPermisosByUsuario = res.data;
+          this.filterListarRolPermisosByUsuario();
+        }
+      );
+    },
+    filterListarRolPermisosByUsuario() {
+      let me = this;
+      me.listRolPermisosByUsuario.map(function (x) {
+        me.listRolPermisosByUsuarioFilter.push(x.slug);
+      });
+      sessionStorage.setItem('listRolPermisosByUsuario', JSON.stringify(me.listRolPermisosByUsuarioFilter));
+      sessionStorage.setItem('authUser', JSON.stringify(authUser));
+      this.loginSuccess();
+    },
+    handleSelect(item) {
+      console.log(item);
+    },
+    handleIconClick(ev) {
+      console.log(ev);
+    }
+  },
+  mounted() {
+    this.links = this.loadAll();
+  },
+  components: { RouterLink }
 }
 </script>

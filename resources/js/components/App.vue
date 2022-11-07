@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar :ruta="ruta" />
+    <Navbar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario" />
     <Sidebar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario" />
 
     <!-- Routes -->
