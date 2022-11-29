@@ -11,7 +11,4 @@
 </template>
 
 <script>
-  export default{
-    name: 'dashBoardIndex',
-  }
 </script>
