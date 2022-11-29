@@ -22,8 +22,8 @@
       <!-- SEARCH FORM -->
       <form class="form-inline ml-3">
         <div class="input-group input-group-sm">
-          <el-autocomplete class="inline-input" v-model="state2" :fetch-suggestions="querySearch"
-            placeholder="Buscar..." :trigger-on-focus="false" @select="handleSelect">
+          <el-autocomplete class="inline-input" v-model="cBusqueda" :fetch-suggestions="querySearch"
+            placeholder="Buscar..." :trigger-on-focus="true" @select="handleSelect">
             <i class="el-icon-search el-input__icon" slot="suffix" />
           </el-autocomplete>
         </div>
@@ -135,12 +135,20 @@ export default {
   data() {
     return {
       links: [],
-      state2: "",
+      cBusqueda: "",
+      listRolPermisosByUsuario: [],
+      listRolPermisosByUsuarioFilter: [],
     };
+  },
+  mounted() {
+    EventBus.$on('notifyRolPermisosByUsuario', data => {
+      this.getListarRolPermisosByUsuario();
+    });
+    this.getListarRolPermisosByUsuario();
   },
   methods: {
     querySearch(queryString, cb) {
-      var links = this.links;
+      var links = this.listRolPermisosByUsuarioFilter;
       var results = queryString ? links.filter(this.createFilter(queryString)) : links;
       // call callback function to return suggestion objects
       cb(results);
@@ -150,23 +158,12 @@ export default {
         return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    loadAll() {
-      return [
-        { "value": "vue", "link": "https://github.com/vuejs/vue" },
-        { "value": "element", "link": "https://github.com/ElemeFE/element" },
-        { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
-        { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
-        { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
-        { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
-        { "value": "babel", "link": "https://github.com/babel/babel" }
-      ];
-    },
     getListarRolPermisosByUsuario() {
       const ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
 
       axios.get(ruta, {
         params: {
-          'nIdUsuario': usuario.id,
+          'nIdUsuario': this.usuario.id,
         }
       }).then(
         res => {
@@ -177,22 +174,28 @@ export default {
     },
     filterListarRolPermisosByUsuario() {
       let me = this;
-      me.listRolPermisosByUsuario.map(function (x) {
-        me.listRolPermisosByUsuarioFilter.push(x.slug);
+      me.listRolPermisosByUsuarioFilter = [];
+      me.listRolPermisosByUsuario.map(function (x, y) {
+        if (x.slug.includes('index')) {
+          me.listRolPermisosByUsuarioFilter.push({
+            'value': x.name,
+            'link': x.slug
+          });
+        }
       });
-      sessionStorage.setItem('listRolPermisosByUsuario', JSON.stringify(me.listRolPermisosByUsuarioFilter));
-      sessionStorage.setItem('authUser', JSON.stringify(authUser));
-      this.loginSuccess();
     },
     handleSelect(item) {
-      console.log(item);
+      if (this.$route.name != item.link) {
+        this.$router.push({name: item.link});
+        this.cBusqueda = '';
+      }
+      else{
+        this.cBusqueda = ''
+      }
     },
     handleIconClick(ev) {
       console.log(ev);
     }
-  },
-  mounted() {
-    this.links = this.loadAll();
   },
   components: { RouterLink }
 }
