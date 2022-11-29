@@ -75,9 +75,9 @@
               </div>
               <div class="card-footer">
                 <div class="row justify-content-center">
-                  <button class="btn btnWidth btn-info btn-flat" @click="getListarUsuarios"
+                  <button class="btn w-25 btn-info btn-flat" @click="getListarUsuarios"
                     v-loading.fullscreen.lock="fullscreenLoading">Buscar</button>
-                  <button class="btn btnWidth btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
+                  <button class="btn w-25 btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
                 </div>
               </div>
             </div>
