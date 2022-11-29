@@ -21,7 +21,7 @@ class FilesController extends Controller
         Storage::putFileAs('public/users', $file, $fileserver);
 
         $res = DB::select(
-            'call sp_Archvio_setRegistrarArchivo (?, ?, ?)',
+            'call sp_Archvio_setRegistrarArchivo (?,?, ?)',
             [
                 asset('storage/users/'.$fileserver),
                 $filename,

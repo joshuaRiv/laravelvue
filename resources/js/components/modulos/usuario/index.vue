@@ -75,9 +75,9 @@
               </div>
               <div class="card-footer">
                 <div class="row justify-content-center">
-                  <button class="btn w-25 btn-info btn-flat" @click="getListarUsuarios"
+                  <button class="btn btnWidth btn-info btn-flat" @click="getListarUsuarios"
                     v-loading.fullscreen.lock="fullscreenLoading">Buscar</button>
-                  <button class="btn w-25 btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
+                  <button class="btn btnWidth btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
                 </div>
               </div>
             </div>
@@ -149,7 +149,7 @@
                               </router-link>
                             </template>
                             <!-- 1 desactivar -->
-                            <template v-if="listRolPermisosByUsuario.includes('usuario.activar')">
+                            <template v-if="listRolPermisosByUsuario.includes('usuario.desactivar')">
                               <button class="btn btn-flat btn-danger btn-sm"
                                 @click="setCambiarEstadoUsuario(1, usuario.id)">
                                 <i class="fas fa-trash"></i> Desactivar
@@ -158,7 +158,7 @@
                           </template>
                           <template v-else>
                             <!-- 2 activar -->
-                            <template v-if="listRolPermisosByUsuario.includes('usuario.desactivar')">
+                            <template v-if="listRolPermisosByUsuario.includes('usuario.activar')">
                               <button class="btn btn-flat btn-danger btn-sm"
                                 @click="setCambiarEstadoUsuario(2, usuario.id)">
                                 <i class="fas fa-check"></i> Activar
@@ -275,7 +275,6 @@ export default {
       }).then(res => {
         this.inicializarPaginacion();
         this.listUsuarios = res.data;
-        console.log(this.listUsuarios[0])
         this.fullscreenLoading = false;
       }).catch(error => {
         console.log(error.response);

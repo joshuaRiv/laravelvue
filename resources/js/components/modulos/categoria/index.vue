@@ -54,9 +54,9 @@
               </div>
               <div class="card-footer">
                 <div class="row justify-content-center">
-                  <button class="btn w-25 btn-info btn-flat" @click="getListarCategorias"
+                  <button class="btn btnWidth btn-info btn-flat" @click="getListarCategorias"
                     v-loading.fullscreen.lock="fullscreenLoading">Buscar</button>
-                  <button class="btn w-25 btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
+                  <button class="btn btnWidth btn-flat btn-default" @click="limpiarCriteriosBsq">Limpiar</button>
                 </div>
               </div>
             </div>
@@ -191,9 +191,9 @@ export default {
       }).catch(error => {
         console.log(error.response);
         if (error.response.status == 401) {
-          sessionStorage.clear();
           this.$router.push({ name: 'login' });
           location.reload();
+          sessionStorage.clear();
           this.fullscreenLoading = false;
         }
       });
