@@ -12,6 +12,13 @@ import Swal from 'sweetalert2';
 import Vue from 'vue';
 window.Swal = Swal;
 
+import Vuesax from 'vuesax'
+
+import 'vuesax/dist/vuesax.css' //Vuesax styles
+Vue.use(Vuesax, {
+    // options here
+})
+
 export const EventBus = new Vue();
 window.EventBus = EventBus;
 

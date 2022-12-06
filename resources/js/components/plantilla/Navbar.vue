@@ -170,7 +170,15 @@ export default {
           this.listRolPermisosByUsuario = res.data;
           this.filterListarRolPermisosByUsuario();
         }
-      );
+      ).catch(error => {
+        console.log(error.response);
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
     },
     filterListarRolPermisosByUsuario() {
       let me = this;
@@ -193,9 +201,6 @@ export default {
         this.cBusqueda = ''
       }
     },
-    handleIconClick(ev) {
-      console.log(ev);
-    }
   },
   components: { RouterLink }
 }

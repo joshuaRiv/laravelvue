@@ -3,7 +3,6 @@ import Router from "vue-router";
 
 import Dashboard from './components/modulos/dashboard/index';
 import Cliente from './components/modulos/cliente/index';
-import Pedido from './components/modulos/pedido/index';
 import Reporte from './components/modulos/reporte/index';
 
 import Usuario from './components/modulos/usuario/index';
@@ -29,6 +28,9 @@ import CategoriaEdit from './components/modulos/categoria/edit';
 import Producto from './components/modulos/producto/index';
 import ProductoCrear from './components/modulos/producto/create';
 import ProductoEditar from './components/modulos/producto/edit';
+
+import Pedido from './components/modulos/pedido/index';
+import PedidoCrear from './components/modulos/pedido/create';
 
 import Undefined from './components/plantilla/404';
 
@@ -129,6 +131,14 @@ export const rutas = [
     path: '/pedidos',
     name: 'pedido.index',
     component: Pedido,
+    beforeEnter: (to, from, next) => {
+      verificarAcceso(to, from, next);
+    }
+  },
+  {
+    path: '/pedidos/crear',
+    name: 'pedido.crear',
+    component: PedidoCrear,
     beforeEnter: (to, from, next) => {
       verificarAcceso(to, from, next);
     }

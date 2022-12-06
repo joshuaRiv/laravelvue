@@ -146,6 +146,7 @@ export default {
       fillBsqProductos: {
         cNombre: '',
         cDescripcion: '',
+        nIdCategoria: ''
       },
       listProductos: [],
       listCategorias: [],

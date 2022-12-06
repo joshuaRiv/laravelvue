@@ -7,7 +7,7 @@ Route::post('/authenticate/login', 'Auth\LoginController@login');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/authenticate/logout', 'Auth\LoginController@logout');
-    Route::get('/authenticate/getRefrescarUsuarioAutenticado', function(){
+    Route::get('/authenticate/getRefrescarUsuarioAutenticado', function () {
         return Auth::user()->load('file');
     });
 
@@ -36,10 +36,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/configuracion/categoria/getListarCategorias', 'Configuracion\CategoriaController@getListarCategorias');
     Route::post('/configuracion/categoria/setRegistrarCategoria', 'Configuracion\CategoriaController@setRegistrarCategoria');
     Route::post('/configuracion/categoria/setEditarCategoria', 'Configuracion\CategoriaController@setEditarCategoria');
-    
+
     Route::get('/configuracion/producto/getListarProductos', 'Configuracion\ProductsController@getListarProductos');
     Route::post('/configuracion/categoria/setRegistrarProducto', 'Configuracion\ProductsController@setRegistrarProducto');
     Route::post('/configuracion/categoria/setEditarProducto', 'Configuracion\ProductsController@setEditarProducto');
+
+    Route::get('/operacion/pedido/getListarPedidos', 'Operacion\OrdersController@getListarPedidos');
+    
+    Route::get('/operacion/cliente/getListarClientes', 'Operacion\CustomersController@getListarClientes');
+    Route::post('/operacion/cliente/setRegistrarCliente', 'Operacion\CustomersController@setRegistrarCliente');
 });
 
 

@@ -50,3 +50,32 @@
 .el-input-number{
   width: 100% !important;
 }
+
+.el-autocomplete{
+  width: 100% !important;
+}
+
+.vs-input{
+  width: 100% !important;
+  border: 1px solid #CED4DA !important;
+  border-radius: .25rem !important;
+  background-color: #fff !important;
+}
+.vs-input:disabled{
+  border: 1px solid #CED4DA !important;
+  background: #e9ecef!important;
+  opacity: 1 !important;
+}
+
+.vs-input-parent, .vs-input-parent--state-null, .vs-component--primary{
+  opacity: 1 !important;
+}
+
+.toast-container{
+  z-index: 99999;
+  position: absolute;
+  top: 0;
+  right: 0;
+  max-height: fit-content !important;
+}
+
