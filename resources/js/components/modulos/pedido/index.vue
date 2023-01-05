@@ -109,6 +109,7 @@
                         <td> {{ item.documento }} </td>
                         <td> {{ item.cliente }} </td>
                         <td> {{ item.total }} </td>
+                        <td> {{ item.vendedor }} </td>
                         <td> {{ item.estado }} </td>
                         <td>
                           <template v-if="listRolPermisosByUsuario.includes('pedido.ver')">

@@ -22,37 +22,39 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-4">
-                <div class="card" :class="(switchCliente) ? 'card-info' : 'card-success'">
+                <div class="card " :class="(switchCliente) ? 'card-info' : 'card-success'">
                   <div class="card-header">
-                    <h3 class="card-title">
-                      Formulario {{ (switchCliente) ? 'Registrar' : 'Buscar' }} Cliente
-                    </h3>
+                    <h3 class="card-title">Formulario {{ (switchCliente) ? 'Registrar' : 'Buscar' }}
+                      Cliente</h3>
                   </div>
                   <div class="card-body">
                     <form role="form">
                       <div class="row">
-                        <!-- 4:15 class 41 registrar perdido p1 -->
                         <div class="col-md-3">
                           <vs-switch square v-model="switchCliente" @change="limpiarCriterios">
                             <template #off>
-                              <i class="fas fa-search" />
+                              <i class="fas fa-plus-square"></i>
                             </template>
                             <template #on>
-                              <i class="fas fa-plus-square" />
+                              <i class="fas fa-search"></i>
                             </template>
                           </vs-switch>
                         </div>
+
                         <div class="col-md-12">
                           <div class="form-group row">
-                            <label class="col-md-12 col-form-label" placeholder="Ej: Administrador">Documento</label>
+                            <label class="col-md-12 col-form-label">Documento</label>
                             <div class="col-md-12">
                               <template v-if="switchCliente">
-                                <input v-model="fillCrearCliente.cDocumento" type="text" class="form-control">
+                                <input type="text" class="form-control" v-model="fillCrearCliente.cDocumento"
+                                  @keyup.enter="setRegistrarPedido">
                               </template>
                               <template v-else>
-                                <el-autocomplete v-model="cBusqueda" :fetch-suggestions="querySearch"
-                                  placeholder="Buscar..." :trigger-on-focus="true" size="medium" @select="clientSelect">
-                                  <i class="el-icon-search el-input__icon" slot="suffix" />
+                                <el-autocomplete class="inline-input" v-model="cBusqueda"
+                                  :fetch-suggestions="querySearch" placeholder="Buscar..." :trigger-on-focus="true"
+                                  size="medium" @select="clientSelect">
+                                  <i class="el-icon-search el-input__icon" slot="suffix">
+                                  </i>
                                 </el-autocomplete>
                               </template>
                             </div>
@@ -60,46 +62,44 @@
                         </div>
                         <div class="col-md-12">
                           <div class="form-group row">
-                            <label class="col-md-12 col-form-label" placeholder="Ej: Administrador">Nombre</label>
+                            <label class="col-md-12 col-form-label">Nombre</label>
                             <div class="col-md-12">
-                              <input v-model="fillCrearCliente.cNombre" type="text"
-                                :disabled="(switchCliente) ? false : true" class="form-control">
+                              <input type="text" class="form-control" v-model="fillCrearCliente.cNombre"
+                                @keyup.enter="setRegistrarPedido" :disabled="(switchCliente) ? false : true">
                             </div>
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="form-group row">
-                            <label class="col-md-12 col-form-label" placeholder="Ej: Administrador">Apellido</label>
+                            <label class="col-md-12 col-form-label">Apellido</label>
                             <div class="col-md-12">
-                              <input v-model="fillCrearCliente.cApellido" type="text"
-                                :disabled="(switchCliente) ? false : true" class="form-control">
+                              <input type="text" class="form-control" v-model="fillCrearCliente.cApellido"
+                                @keyup.enter="setRegistrarPedido" :disabled="(switchCliente) ? false : true">
                             </div>
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="form-group row">
-                            <label class="col-md-12 col-form-label" placeholder="Ej: Administrador">Email</label>
+                            <label class="col-md-12 col-form-label">Email</label>
                             <div class="col-md-12">
-                              <vs-input v-model="fillCrearCliente.cEmail" :disabled="(switchCliente) ? false : true"
-                                class="">
-                                <template v-if="validEmail" #message-success>
-                                  Correo electrónico válido
-                                </template>
-                                <template v-if="!validEmail && fillCrearCliente.cEmail !== ''" #message-danger>
-                                  Correo electrónico inválido
-                                </template>
+                              <vs-input v-model="fillCrearCliente.cEmail" placeholder="correo@gmail.com"
+                                :disabled="(switchCliente) ? false : true">
+                                <template v-if="validEmail" #message-success>Correo
+                                  Electronico válido</template>
+                                <template v-if="!validEmail && fillCrearCliente.cEmail !== ''" #message-danger>Correo
+                                  Electronico
+                                  invalido</template>
                               </vs-input>
-                              <!-- <input v-model="fillCrearCliente.cEmail" 
-                                  type="email" :disabled="(switchCliente) ? false : true" class="form-control"> -->
+                              <!-- <input type="email" class="form-control" v-model="fillCrearCliente.cEmail" @keyup.enter="setRegistrarPedido" :disabled="(switchCliente) ? false : true"> -->
                             </div>
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="form-group row">
-                            <label class="col-md-12 col-form-label" placeholder="Ej: Administrador">Télefono</label>
+                            <label class="col-md-12 col-form-label">Teléfono</label>
                             <div class="col-md-12">
-                              <input v-model="fillCrearCliente.cTelefono" type="tel"
-                                :disabled="(switchCliente) ? false : true" class="form-control">
+                              <input type="tel" class="form-control" v-model="fillCrearCliente.cTelefono"
+                                @keyup.enter="setRegistrarPedido" :disabled="(switchCliente) ? false : true">
                             </div>
                           </div>
                         </div>
@@ -107,10 +107,9 @@
                     </form>
                   </div>
                   <div class="card-footer">
-                    <div class="row justify-content-center">
-                      <button class="btn btnFull btn-info btn-flat" @click="validarCliente"
-                        v-loading.fullscreen.lock="fullscreenLoading">{{ (switchCliente) ? 'Registrar' : 'Buscar'
-                        }}</button>
+                    <div class="row">
+                      <button v-if="fTotalPedido > 0 && listPedidos.length > 0" class="btn btn-flat btn-info btnFull"
+                        @click.prevent="setRegistrarPedido">Registrar</button>
                     </div>
                   </div>
                 </div>
@@ -119,36 +118,76 @@
                 <div class="card card-info">
                   <div class="card-header">
                     <h3 class="card-title">
-                      Listar Permisos
+                      Seleccionar Productos
                     </h3>
                   </div>
                   <div class="card-body table-responsive">
-                    <template v-if="listPermisosFilter.length">
+                    <vs-tooltip not-arrow right>
+                      <vs-button icon relief animation-type="rotate" @click.prevent="agregarProducto">
+                        <i class="fa-regular fa-square-plus"></i>
+                        <template #animate>
+                          <i class="fa-solid fa-square-plus"></i>
+                        </template>
+                      </vs-button>
+                      <template #tooltip>
+                        Agregar producto
+                      </template>
+                    </vs-tooltip>
+                    <template v-if="listPedidos.length">
                       <div class="scrollTable">
                         <table class="table table-hover table-head-fixed text-nowrap projects">
                           <thead>
                             <tr>
+                              <th>Artículo</th>
+                              <th>Stock</th>
+                              <th>Precio</th>
+                              <th>SubTotal</th>
                               <th>Acción</th>
-                              <th>Nombre</th>
-                              <th>Url Amigable</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="(rol, index) in listPermisosFilter" :key="index"
-                              @click.prevent="marcarFila(index)">
+                            <tr v-for="(item, index) in listPedidos" :key="index">
                               <td>
-                                <el-checkbox v-model="rol.checked"></el-checkbox>
+                                <el-select v-model="item.nIdProducto" placeholder="Seleccione un producto" clearable
+                                  filterable @change="obtenerProducto(item.nIdProducto, index)">
+                                  <el-option v-for="item in listProductos" :key="item.id" :label="item.name"
+                                    :value="item.id">
+                                  </el-option>
+                                </el-select>
                               </td>
-                              <td> {{ rol.name }} </td>
-                              <td> {{ rol.slug }} </td>
+                              <td>
+                                <el-input-number v-model="item.nStock" controls-position="right" :min="1"
+                                  :max="(item.nIdProducto) ? item.nStockFlag : 1"></el-input-number>
+                                <!-- :min="item.nStock >= 1 ? 1 : 0" :max="item.nStock >= 1 ? item.nStock : 0"></el-input-number> -->
+                              </td>
+                              <td> {{ item.fPrecio }} </td>
+                              <td> {{ (item.fSubTotal = item.nStock * item.fPrecio) }} </td>
+                              <td>
+                                <el-tooltip class="item" effect="dark" content="Remover producto" placement="left">
+                                  <vs-button icon relief animation-type="rotate" @click="removerProducto(index)">
+                                    <i class="fas fa-trash" />
+                                    <template #animate>
+                                      <i class="fas fa-trash" />
+                                    </template>
+                                  </vs-button>
+                                </el-tooltip>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
+                      <el-row :gutter="20">
+                        <el-col :span="16">
+                          <vs-input border v-model="cComentario" placeholder="Comentario" />
+                        </el-col>
+                        <el-col :span="8">
+                          <strong>Total = </strong> {{ fTotalPedido = totalPedido }}
+                        </el-col>
+                      </el-row>
                     </template>
                     <template v-else>
                       <div class="callout callout-info">
-                        <h5>No se encontraron resultados</h5>
+                        <h5>No se encontraron resultados...</h5>
                       </div>
                     </template>
                   </div>
@@ -159,6 +198,7 @@
         </div>
       </div>
     </div>
+
     <div class="toast-container ">
       <div class="p-2" v-for="error in mensajeError" :key="error">
         <div class="toast fade bg-primary" :class="{ show: modalShow }"
@@ -181,22 +221,30 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
       fillCrearCliente: {
-        nIdCliente: 0,
+        nIdCliente: '',
         cDocumento: '',
         cNombre: '',
         cApellido: '',
         cEmail: '',
-        cTelefono: '',
+        cTelefono: ''
       },
-      listPermisos: [],
-      listPermisosFilter: [],
+      switchCliente: false,
+
+      cBusqueda: '',
+      listClientes: [],
+      listClientesFilter: [],
+
+      listProductos: [],
+      listPedidos: [],
+      cComentario: '',
+      fTotalPedido: 0,
+
       fullscreenLoading: false,
+
       modalShow: false,
       mostrarModal: {
         display: 'block',
@@ -206,58 +254,188 @@ export default {
         display: 'none',
       },
       error: 0,
-      mensajeError: [],
-      switchCliente: false,
-      cBusqueda: "",
-      listClientes: [],
-      listClientesFilter: [],
-
+      mensajeError: []
     }
   },
   computed: {
     validEmail() {
       return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.fillCrearCliente.cEmail)
+    },
+    totalPedido() {
+      return this.listPedidos.reduce(function (valorAnterior, valorActual) {
+        return valorAnterior + parseFloat(valorActual.fSubTotal)
+      }, 0)
     }
   },
   mounted() {
-    this.getListarPermisosByRol();
+    this.agregarProducto();
     this.getListarClientes();
+    this.getListarProductos();
   },
   methods: {
+    querySearch(queryString, cb) {
+      var links = this.listClientesFilter;
+      var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      // call callback function to return suggestions
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (link) => {
+        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) != -1);
+      };
+    },
+    getListarClientes() {
+      const ruta = '/operacion/cliente/getListarClientes';
+      axios.get(ruta).then(response => {
+        this.listClientes = response.data;
+        this.filterListarClientes();
+      }).catch(error => {
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' })
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      })
+    },
+    filterListarClientes() {
+      let me = this;
+      me.listClientesFilter = [];
+      me.listClientes.map(function (x, y) {
+        me.listClientesFilter.push({
+          'value': x.document + ' - ' + x.fullname,
+          'link': x.id
+        })
+      })
+    },
+    clientSelect(item) {
+      let rpta = this.listClientes.filter(cliente => {
+        return ((String(cliente.id)).indexOf(String(item.link)) != -1);
+      })
+      this.fillCrearCliente.nIdCliente = rpta[0].id;
+      this.fillCrearCliente.cDocumento = rpta[0].document;
+      this.fillCrearCliente.cNombre = rpta[0].name;
+      this.fillCrearCliente.cApellido = rpta[0].lastname;
+      this.fillCrearCliente.cEmail = rpta[0].email;
+      this.fillCrearCliente.cTelefono = rpta[0].phone;
+    },
+
+    getListarProductos() {
+      const ruta = '/configuracion/producto/getListarProductos'
+      axios.get(ruta).then(response => {
+        this.listProductos = response.data;
+      }).catch(error => {
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' })
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      })
+    },
+
     limpiarCriterios() {
       this.fillCrearCliente.nIdCliente = '';
+      this.cBusqueda = '';
       this.fillCrearCliente.cDocumento = '';
       this.fillCrearCliente.cNombre = '';
       this.fillCrearCliente.cApellido = '';
       this.fillCrearCliente.cEmail = '';
       this.fillCrearCliente.cTelefono = '';
-      this.cBusqueda = '';
     },
     abrirModal() {
       this.modalShow = !this.modalShow;
     },
-    getListarPermisosByRol() {
-      const ruta = '/administracion/rol/getListarPermisosByRol';
+    agregarProducto() {
+      let me = this;
 
-      axios.get(ruta).then(
-        res => {
-          this.listPermisos = res.data;
-          this.filterPermisosByRol();
+      if (this.listPedidos.length == 0) {
+        this.listPedidos.push({
+          'nIdProducto': '',
+          'nStock': '',
+          'nStockFlag': '',
+          'fPrecio': '',
+          'fSubTotal': ''
+        })
+      } else {
+        let contador = 0;
+        this.listPedidos.map(function (x, y) {
+          if (!x.nIdProducto || !x.nStock || !x.fPrecio || !x.fSubTotal) {
+            contador++;
+            //Notificacion
+            const noti = me.$vs.notification({
+              square: false,
+              color: 'warn',
+              title: 'Alerta',
+              text: 'Debe completar la información de la fila = ' + (y + 1)
+            })
+          }
+        })
+        if (contador == 0) {
+          this.listPedidos.push({
+            'nIdProducto': '',
+            'nStock': '',
+            'nStockFlag': '',
+            'fPrecio': '',
+            'fSubTotal': ''
+          })
         }
-      ).catch(error => {
-        console.log(error.response);
-        if (error.response.status == 401) {
-          this.$router.push({ name: 'login' });
-          location.reload();
-          sessionStorage.clear();
-          this.fullscreenLoading = false;
+      }
+
+    },
+    removerProducto(index) {
+      this.$delete(this.listPedidos, index);
+    },
+    obtenerProducto(nIdProducto, index) {
+      let me = this;
+
+      if (!nIdProducto) {
+        Vue.nextTick(function () {
+          me.listPedidos[index].nStock = '';
+          me.listPedidos[index].nStockFlag = '';
+          me.listPedidos[index].fPrecio = '';
+        })
+      }
+
+      let contador = 0;
+      this.listPedidos.map(function (x, y) {
+        if (x.nIdProducto == nIdProducto && y != index) {
+          contador++;
+          //Notificacion
+          const noti = me.$vs.notification({
+            square: false,
+            color: 'warn',
+            title: 'Alerta',
+            text: 'El producto ya se encuentra en  la fila ' + (y + 1)
+          })
         }
       });
+      if (contador == 0) {
+        let rpta = this.listProductos.filter(producto => {
+          return ((String(producto.id)).indexOf(String(nIdProducto)) != -1);
+        })
+        if (rpta[0].stock > 0) {
+          this.listPedidos[index].nStock = rpta[0].stock;
+          this.listPedidos[index].nStockFlag = rpta[0].stock;
+          this.listPedidos[index].fPrecio = rpta[0].price;
+        } else {
+          this.listPedidos[index].nIdProducto = '';
+          //Notificacion
+          const noti = me.$vs.notification({
+            color: 'warn',
+
+            title: 'Alerta',
+            text: 'El producto producto seleccionado no cuenta con stock disponible'
+          })
+        }
+      } else {
+        this.listPedidos[index].nIdProducto = '';
+      }
     },
     filterPermisosByRol() {
       let me = this;
-      me.listPermisos.map(function (x) {
-        me.listPermisosFilter.push(
+      me.listPedidos.map(function (x) {
+        me.listClientesFilter.push(
           {
             'id': x.id,
             'name': x.name,
@@ -267,24 +445,29 @@ export default {
         );
       });
     },
-    marcarFila(index) {
-      this.listPermisosFilter[index].checked = !this.listPermisosFilter[index].checked;
-    },
-    validarCliente() {
+    setRegistrarPedido() {
+      console.log("set registrar pedido")
       if (this.validarRegistrarPedido()) {
         this.modalShow = true;
+        console.log("error")
         return;
       }
 
       this.fullscreenLoading = true;
 
       if (this.switchCliente) {
+        console.log("switch true")
         this.setRegistrarCliente();
+      }
+      else{
+        console.log("switch false")
+        this.setGuardarPedido(this.fillCrearCliente.nIdCliente);
       }
 
 
     },
     setRegistrarCliente() {
+      console.log("registrar cliente")
       const url = '/operacion/cliente/setRegistrarCliente';
       axios.post(url, {
         'cDocumento': this.fillCrearCliente.cDocumento,
@@ -293,12 +476,34 @@ export default {
         'cEmail': this.fillCrearCliente.cEmail,
         'cTelefono': this.fillCrearCliente.cTelefono,
       }).then(res => {
+        console.log(res.data);
+        let nIdCliente = res.data[0].nIdCliente;
+        this.setGuardarPedido(nIdCliente);
+      }).catch(error => {
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          this.fullscreenLoading = false;
+        }
+      });
+    },
+    setGuardarPedido(nIdCliente) {
+      console.log("Guardar pedido idcliente: " + nIdCliente);
+      console.log("Total pedido cca: " + this.fTotalPedido);
+      const url = '/operacion/pedido/setRegistrarPedido';
+      axios.post(url, {
+        'nIdCliente': nIdCliente,
+        'cComentario': this.cComentario,
+        'fSubtotal': this.fTotalPedido,
+        'listPedido': this.listPedidos,
+      }).then(res => {
         this.fullscreenLoading = false;
         console.log(res.data);
-        this.getListarClientes();
+        // let nIdCliente = res.data[0].nIdCliente;
+        this.$router.push('/pedidos');
       }).catch(error => {
-        console.log(error.response);
-        if (error.response.status == 401) {
+        if (error.res.status == 401) {
           this.$router.push({ name: 'login' });
           location.reload();
           sessionStorage.clear();
@@ -312,36 +517,23 @@ export default {
 
       if (this.switchCliente) {
         if (!this.fillCrearCliente.cDocumento) {
-          this.mensajeError.push("El documento es un campo obligatorio");
+          this.mensajeError.push("El Documento es un campo obligatorio")
         }
         if (!this.fillCrearCliente.cNombre) {
-          this.mensajeError.push("El Nombre es un campo obligatorio");
+          this.mensajeError.push("La Nombre es un campo obligatorio")
         }
         if (!this.fillCrearCliente.cApellido) {
-          this.mensajeError.push("El Apellido es un campo obligatorio");
+          this.mensajeError.push("La Apellido es un campo obligatorio")
         }
         if (this.fillCrearCliente.cEmail) {
           if (!this.validEmail) {
-            this.mensajeError.push("El correo electrónico tiene un formato inválido");
+            this.mensajeError.push("El correo electronico, tiene un formato invalido")
           }
         }
-      }
-      else {
+      } else {
         if (!this.fillCrearCliente.nIdCliente) {
-          this.mensajeError.push("El cliente es necesario cargar");
+          this.mensajeError.push("El Cliente es necesario cargar")
         }
-      }
-
-
-      let contador = 0;
-      this.listPermisosFilter.map(function (x) {
-        if (x.checked == true) {
-          contador++;
-        }
-      });
-
-      if (contador == 0) {
-        this.mensajeError.push("Debe seleccionar al menos un permiso");
       }
 
       if (this.mensajeError.length) {
@@ -349,59 +541,38 @@ export default {
       }
       return this.error;
     },
-    querySearch(queryString, cb) {
-      var links = this.listClientesFilter;
-      var results = queryString ? links.filter(this.createFilter(queryString)) : links;
-      // call callback function to return suggestion objects
-      cb(results);
-    },
-    createFilter(queryString) {
-      return (link) => {
-        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-      };
-    },
-    getListarClientes() {
-      const ruta = '/operacion/cliente/getListarClientes';
-
-      axios.get(ruta).then(
-        res => {
-          this.listClientes = res.data;
-          this.filterListarClientes();
-        }
-      ).catch(error => {
-        console.log(error.response);
-        if (error.response.status == 401) {
-          this.$router.push({ name: 'login' });
-          location.reload();
-          sessionStorage.clear();
-          this.fullscreenLoading = false;
-        }
-      });
-    },
-    filterListarClientes() {
-      let me = this;
-      me.listClientesFilter = [];
-      me.listClientes.map(function (x, y) {
-
-        me.listClientesFilter.push({
-          'value': x.document + ' - ' + x.fullname,
-          'link': x.id
-        });
-
-      });
-    },
-    clientSelect(item) {
-      let res = this.listClientes.filter(cliente => {
-        return ((String(cliente.id)).indexOf(String(item.link)) != -1);
-      });
-      console.log(res);
-      this.fillCrearCliente.nIdCliente = res[0].id;
-      this.fillCrearCliente.cDocumento = res[0].document;
-      this.fillCrearCliente.cNombre = res[0].name;
-      this.fillCrearCliente.cApellido = res[0].lastname;
-      this.fillCrearCliente.cEmail = res[0].email;
-      this.fillCrearCliente.cTelefono = res[0].phone;
-    },
   }
 }
 </script>
+
+<style>
+.el-row {
+  margin-bottom: 20px;
+}
+
+.el-col {
+  border-radius: 4px;
+}
+
+.bg-purple-dark {
+  background: #99a9bf;
+}
+
+.bg-purple {
+  background: #d3dce6;
+}
+
+.bg-purple-light {
+  background: #e5e9f2;
+}
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+</style>

@@ -55,20 +55,21 @@
   width: 100% !important;
 }
 
-.vs-input{
-  width: 100% !important;
+input#createPedidoEmail{
+  min-width: 100% !important;
   border: 1px solid #CED4DA !important;
   border-radius: .25rem !important;
   background-color: #fff !important;
 }
-.vs-input:disabled{
+#createPedidoEmail.vs-input:disabled{
   border: 1px solid #CED4DA !important;
   background: #e9ecef!important;
   opacity: 1 !important;
 }
 
-.vs-input-parent, .vs-input-parent--state-null, .vs-component--primary{
+.vs-input, .vs-input-parent{
   opacity: 1 !important;
+  width: 100% !important;
 }
 
 .toast-container{
@@ -77,5 +78,9 @@
   top: 0;
   right: 0;
   max-height: fit-content !important;
+}
+
+.vs-tooltip-content{
+  width: min-content !important;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="login-box">
     <div class="login-logo">
-      <router-link :to="{name:'login'}">
+      <router-link :to="{ name: 'login' }">
         <b>Iniciar Sesión</b>
       </router-link>
     </div>
@@ -12,27 +12,37 @@
 
         <form method="post">
           <div class="input-group mb-3">
-            <input type="email" @keyup.enter="login" v-model="fillLogin.cEmail" class="form-control" placeholder="Email">
+            <vs-input :state="(error) ? 'danger' : ''" icon-after @keyup.enter="login" v-model="fillLogin.cEmail" placeholder="Email">
+              <template #icon>
+                <i class='fas fa-envelope'></i>
+              </template>
+            </vs-input>
+            <!-- <input type="email" @keyup.enter="login" v-model="fillLogin.cEmail" class="form-control" placeholder="Email">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="input-group mb-3">
-            <input type="password" @keyup.enter="login" v-model="fillLogin.cContrasena" class="form-control" placeholder="Password">
+            <vs-input :state="(error) ? 'danger' : ''" icon-after @keyup.enter="login" type="password" v-model="fillLogin.cContrasena" placeholder="Password">
+              <template #icon>
+                <i class='fas fa-lock'></i>
+              </template>
+            </vs-input>
+            <!-- <input type="password" @keyup.enter="login" v-model="fillLogin.cContrasena" class="form-control" placeholder="Password">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
               </div>
-            </div>
+            </div> -->
           </div>
         </form>
 
         <div class="row">
           <div class="col-md-12">
             <span v-if="error">
-              <div v-for="(e,index) in mensajeError" :key="index" class="callout callout-danger" >
+              <div v-for="(e, index) in mensajeError" :key="index" class="callout callout-danger">
                 {{ e }}
               </div>
             </span>
@@ -40,7 +50,7 @@
         </div>
 
         <div class="social-auth-links text-center mb-3">
-          <button href="#" class="btn btn-flat btn-block btn-danger" @click.prevent="login" v-loading.fullscreen.lock="fullscreenLoading">
+          <button href="#" class="btn btn-flat btn-block btn-danger" @click.prevent="login">
             Iniciar Sesión
           </button>
         </div>
@@ -62,8 +72,8 @@
 import Axios from 'axios';
 
 export default {
-  data(){
-    return{
+  data() {
+    return {
       fillLogin: {
         cEmail: '',
         cContrasena: '',
@@ -76,25 +86,35 @@ export default {
     }
   },
   methods: {
-    login(){
+    login() {
       if (this.validarLogin()) {
         return;
       }
-      this.fullscreenLoading = true;
+
+      const loading = this.$vs.loading({
+        type: 'square',
+        color: '#ff0000',
+        text: "Cargando",
+      });
+
       const url = '/authenticate/login';
       Axios.post(url, {
-          'cEmail' : this.fillLogin.cEmail,
-          'cContrasena' : this.fillLogin.cContrasena,
+        'cEmail': this.fillLogin.cEmail,
+        'cContrasena': this.fillLogin.cContrasena,
       }).then(res => {
         // console.log(res.data);
         if (res.data.code == 401) {
           this.loginFailed();
         }
-        else if(res.data.code == 200){
+        else if (res.data.code == 200) {
           // this.loginSuccess();
           this.getListarRolPermisosByUsuario(res.data.authUser);
         }
-        this.fullscreenLoading = false;
+        
+        setTimeout(() => {
+          loading.close()
+        }, 3000)
+
       });
     },
     getListarRolPermisosByUsuario(authUser) {
@@ -120,7 +140,7 @@ export default {
       sessionStorage.setItem('authUser', JSON.stringify(authUser));
       this.loginSuccess();
     },
-    validarLogin(){
+    validarLogin() {
       this.error = 0;
       this.mensajeError = [];
 
@@ -135,7 +155,7 @@ export default {
       }
       return this.error;
     },
-    loginFailed(){
+    loginFailed() {
       this.error = 0;
       this.mensajeError = [];
       this.mensajeError.push('Credenciales incorrectas.');
@@ -146,8 +166,8 @@ export default {
       }
       return this.error;
     },
-    loginSuccess(){
-      this.$router.push({name: 'dashboard.index'});
+    loginSuccess() {
+      this.$router.push({ name: 'dashboard.index' });
       location.reload();
     },
   }
