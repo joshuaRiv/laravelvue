@@ -453,20 +453,24 @@ export default {
         return;
       }
 
-      this.fullscreenLoading = true;
+      const loading = this.$vs.loading({
+        type: 'square',
+        color: '#ff0000',
+        text: "Cargando",
+      });
 
       if (this.switchCliente) {
         console.log("switch true")
-        this.setRegistrarCliente();
+        this.setRegistrarCliente(loading);
       }
       else{
         console.log("switch false")
-        this.setGuardarPedido(this.fillCrearCliente.nIdCliente);
+        this.setGuardarPedido(this.fillCrearCliente.nIdCliente, loading);
       }
 
 
     },
-    setRegistrarCliente() {
+    setRegistrarCliente(loading) {
       console.log("registrar cliente")
       const url = '/operacion/cliente/setRegistrarCliente';
       axios.post(url, {
@@ -478,7 +482,7 @@ export default {
       }).then(res => {
         console.log(res.data);
         let nIdCliente = res.data[0].nIdCliente;
-        this.setGuardarPedido(nIdCliente);
+        this.setGuardarPedido(nIdCliente, loading);
       }).catch(error => {
         if (error.response.status == 401) {
           this.$router.push({ name: 'login' });
@@ -488,7 +492,7 @@ export default {
         }
       });
     },
-    setGuardarPedido(nIdCliente) {
+    setGuardarPedido(nIdCliente, loading) {
       console.log("Guardar pedido idcliente: " + nIdCliente);
       console.log("Total pedido cca: " + this.fTotalPedido);
       const url = '/operacion/pedido/setRegistrarPedido';
@@ -498,16 +502,41 @@ export default {
         'fSubtotal': this.fTotalPedido,
         'listPedido': this.listPedidos,
       }).then(res => {
-        this.fullscreenLoading = false;
-        console.log(res.data);
-        // let nIdCliente = res.data[0].nIdCliente;
-        this.$router.push('/pedidos');
+        this.setGenerarDocumento(res.data, loading);
       }).catch(error => {
         if (error.res.status == 401) {
           this.$router.push({ name: 'login' });
           location.reload();
           sessionStorage.clear();
           this.fullscreenLoading = false;
+        }
+      });
+    },
+    setGenerarDocumento(nIdPedido, loading) {
+      var config = {
+        responseType: 'blob'
+      };
+
+      const url = '/operacion/pedido/setGenerarDocumento';
+      axios.post(url, {
+        'nIdPedido': nIdPedido,
+      }, config).then(res => {
+        console.log(res.data);
+        
+        const url = URL.createObjectURL(
+          new Blob([res.data], { type: 'application/pdf' })
+        );
+        window.open(url);
+
+        loading.close();
+      }).catch(error => {
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          setTimeout(() => {
+            loading.close()
+          }, 3000)
         }
       });
     },

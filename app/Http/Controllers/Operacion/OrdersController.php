@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class OrdersController extends Controller
 {
@@ -46,7 +47,7 @@ class OrdersController extends Controller
         $fTotalPedido   =   $request->fSubtotal;
         $nIdAuthUser    =   Auth::id();
 
-        $cComentario    =   ($cComentario   ==  NULL) ? ($cComentario   =   '-') :   $cComentario;
+        $cComentario    =   ($cComentario   ==  NULL) ? ($cComentario   =   '') :   $cComentario;
         $fTotalPedido    =   ($fTotalPedido   ==  NULL) ? ($fTotalPedido   =   0) :   $fTotalPedido;
 
         try {
@@ -80,11 +81,41 @@ class OrdersController extends Controller
                 }
             }
             DB::commit();
-            return $rpta;
+            return $nIdPedido;
         } catch (Exception $e) {
             // capturara algun error ocurrido en el "try"
             return $e;
             DB::rollBack();
         }
+    }
+
+    public function setGenerarDocumento(request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdPedido = $request->nIdPedido;
+
+        $logo = public_path('img/AdminLTELogo.png');
+
+        $rptaPedido        =   DB::select(
+            'call sp_Pedido_getPedido (?)',
+            [
+                $nIdPedido,
+            ]
+        );
+        
+        $rptaDetalle       =   DB::select(
+            'call sp_Pedido_getDetallePedido (?)',
+            [
+                $nIdPedido,
+            ]
+        );
+
+        $pdf = PDF::loadView('reportes.pedido.pdf.ver',[
+            'pedido' => $rptaPedido,
+            'detallesPedido' => $rptaDetalle,
+            'logo' => $logo,
+        ]);
+        return $pdf->download('invoice.pdf');
     }
 }

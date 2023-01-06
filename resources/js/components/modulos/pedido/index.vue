@@ -62,10 +62,9 @@
                       <div class="form-group-row">
                         <label class="col-md-3 col-form-label">Estado</label>
                         <div class="col-md-9">
-                          <el-select v-model="fillBsqPedido.nIdEstado" placeholder="Seleccione un estado"
-                            clearable>
+                          <el-select v-model="fillBsqPedido.nIdEstado" placeholder="Seleccione un estado" clearable>
                             <!-- modificar value y label -->
-                            <el-option v-for="item in listEstados" :key="item.value" :label="item.label" 
+                            <el-option v-for="item in listEstados" :key="item.value" :label="item.label"
                               :value="item.value">
                             </el-option>
                           </el-select>
@@ -113,7 +112,7 @@
                         <td> {{ item.estado }} </td>
                         <td>
                           <template v-if="listRolPermisosByUsuario.includes('pedido.ver')">
-                            <button class="btn btn-flat btn-info btn-sm">
+                            <button class="btn btn-flat btn-info btn-sm" @click.prevent="setGenerarDocumento(item.id)">
                               <i class="far fa-file-pdf"></i> Ver PDF
                             </button>
                           </template>
@@ -169,8 +168,8 @@ export default {
       },
       listPedidos: [],
       listEstados: [
-        {value: 'A', label: 'Activo'},
-        {value: 'I', label: 'Inactivo'},
+        { value: 'A', label: 'Activo' },
+        { value: 'I', label: 'Inactivo' },
       ],
       listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
       pageNumber: 0,
@@ -206,6 +205,9 @@ export default {
       return pagesArray;
     },
   },
+  mounted(){
+    this.getListarPedidos();
+  },
   methods: {
     limpiarCriteriosBsq() {
       this.fillBsqPedido.cNombre = '';
@@ -230,7 +232,6 @@ export default {
       }).then(res => {
         this.inicializarPaginacion();
         this.listPedidos = res.data;
-        console.log(this.listPedidos);
         this.fullscreenLoading = false;
       }).catch(error => {
         if (error.response.status == 401) {
@@ -238,6 +239,40 @@ export default {
           location.reload();
           sessionStorage.clear();
           this.fullscreenLoading = false;
+        }
+      });
+    },
+    setGenerarDocumento(nIdPedido) {
+      const loading = this.$vs.loading({
+        type: 'square',
+        color: '#ff0000',
+        text: "Cargando",
+      });
+      // 7:22 udemy pt1
+      var config = {
+        responseType: 'blob'
+      };
+
+      const url = '/operacion/pedido/setGenerarDocumento';
+      axios.post(url, {
+        'nIdPedido': nIdPedido,
+      }, config).then(res => {
+        console.log(res.data);
+        
+        const url = URL.createObjectURL(
+          new Blob([res.data], { type: 'application/pdf' })
+        );
+        window.open(url);
+
+        loading.close()
+      }).catch(error => {
+        if (error.response.status == 401) {
+          this.$router.push({ name: 'login' });
+          location.reload();
+          sessionStorage.clear();
+          setTimeout(() => {
+            loading.close()
+          }, 3000)
         }
       });
     },
