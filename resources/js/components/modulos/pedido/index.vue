@@ -117,8 +117,8 @@
                             </button>
                           </template>
                           <template v-if="listRolPermisosByUsuario.includes('pedido.rechazar')">
-                            <button class="btn btn-flat btn-danger btn-sm">
-                              <i class="fas fa-trash"></i> Rechazar
+                            <button v-if="item.state == 'A'" class="btn btn-flat btn-danger btn-sm"  @click="setCambiarEstadoPedido(1, item.id)">
+                              <i class="fas fa-trash"></i> Rechazar P
                             </button>
                           </template>
                         </td>
@@ -248,7 +248,6 @@ export default {
         color: '#ff0000',
         text: "Cargando",
       });
-      // 7:22 udemy pt1
       var config = {
         responseType: 'blob'
       };
@@ -287,6 +286,44 @@ export default {
     },
     inicializarPaginacion() {
       this.pageNumber = 0;
+    },
+    setCambiarEstadoPedido(op, id) {
+      Swal.fire({
+        title: '¿Está seguro de ' + ((op == 1) ? 'rechazar' : 'activar') + ' el pedido?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: (op == 1) ? 'Sí, rechazar' : 'Sí, activar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.fullscreenLoading = true;
+          let url = '/operacion/pedido/setCambiarEstadoPedido';
+          axios.post(url, {
+            'nIdPedido': id,
+            'cEstado': (op == 1) ? 'I' : 'A',
+          }).then(
+            response => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Se ' + ((op == 1) ? 'rechazó' : 'activó') + ' el pedido.',
+                showConfirmButton: false,
+                timer: 1500,
+                cancelButtonText: 'Cancelar'
+              });
+              this.getListarPedidos();
+            }).catch(error => {
+              console.log(error.response);
+              if (error.response.status == 401) {
+                this.$router.push({ name: 'login' });
+                location.reload();
+                sessionStorage.clear();
+                this.fullscreenLoading = false;
+              }
+            });
+        }
+      })
     },
   }
 }

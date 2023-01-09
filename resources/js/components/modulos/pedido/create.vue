@@ -529,6 +529,9 @@ export default {
         window.open(url);
 
         loading.close();
+
+        this.$router.push('/pedidos');
+
       }).catch(error => {
         if (error.response.status == 401) {
           this.$router.push({ name: 'login' });
