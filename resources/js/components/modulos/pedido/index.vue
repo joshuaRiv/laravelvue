@@ -62,7 +62,7 @@
                       <div class="form-group-row">
                         <label class="col-md-3 col-form-label">Estado</label>
                         <div class="col-md-9">
-                          <el-select v-model="fillBsqPedido.nIdEstado" placeholder="Seleccione un estado" clearable>
+                          <el-select v-model="fillBsqPedido.cEstado" placeholder="Seleccione un estado" clearable>
                             <!-- modificar value y label -->
                             <el-option v-for="item in listEstados" :key="item.value" :label="item.label"
                               :value="item.value">
@@ -109,7 +109,14 @@
                         <td> {{ item.cliente }} </td>
                         <td> {{ item.total }} </td>
                         <td> {{ item.vendedor }} </td>
-                        <td> {{ item.estado }} </td>
+                        <td>
+                          <template v-if="item.state == 'A'">
+                            <span class="badge badge-success">{{ item.estado }}</span>
+                          </template>
+                          <template v-else>
+                            <span class="badge badge-danger">{{ item.estado }}</span>
+                          </template>
+                        </td>
                         <td>
                           <template v-if="listRolPermisosByUsuario.includes('pedido.ver')">
                             <button class="btn btn-flat btn-info btn-sm" @click.prevent="setGenerarDocumento(item.id)">
@@ -164,7 +171,7 @@ export default {
         cNombre: '',
         cDocumento: '',
         cPedido: '',
-        nIdEstado: '',
+        cEstado: '',
       },
       listPedidos: [],
       listEstados: [
@@ -213,7 +220,7 @@ export default {
       this.fillBsqPedido.cNombre = '';
       this.fillBsqPedido.cDocumento = '';
       this.fillBsqPedido.cPedido = '';
-      this.fillBsqPedido.nIdEstado = '';
+      this.fillBsqPedido.cEstado = '';
     },
     limpiarBandejaUsuarios() {
       this.listPedidos = [];
@@ -227,7 +234,7 @@ export default {
           'cNombre': this.fillBsqPedido.cNombre,
           'cDocumento': this.fillBsqPedido.cDocumento,
           'cPedido': this.fillBsqPedido.cPedido,
-          'nIdEstado': this.fillBsqPedido.nIdEstado,
+          'cEstado': this.fillBsqPedido.cEstado,
         }
       }).then(res => {
         this.inicializarPaginacion();

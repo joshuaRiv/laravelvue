@@ -18,12 +18,12 @@ class OrdersController extends Controller
         $cNombre = $req->cNombre;
         $cDocumento = $req->cDocumento;
         $cPedido = $req->cPedido;
-        $nIdEstado = $req->nIdEstado;
+        $cEstado = $req->cEstado;
 
         $cNombre = ($cNombre == NULL)  ? ($cNombre = '') : $cNombre;
         $cDocumento = ($cDocumento == NULL)  ? ($cDocumento = '') : $cDocumento;
         $cPedido = ($cPedido == NULL) ? ($cPedido = '') : $cPedido;
-        $nIdEstado = ($nIdEstado == NULL)  ? ($nIdEstado = 0) : $nIdEstado;
+        $cEstado = ($cEstado == NULL)  ? ($cEstado = '') : $cEstado;
 
         $res = DB::select(
             'call sp_Pedido_getListarPedidos (?,?,?,?)',
@@ -31,7 +31,7 @@ class OrdersController extends Controller
                 $cNombre,
                 $cDocumento,
                 $cPedido,
-                $nIdEstado,
+                $cEstado,
             ]
         );
 
