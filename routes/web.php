@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/operacion/cliente/getListarClientes', 'Operacion\CustomersController@getListarClientes');
     Route::post('/operacion/cliente/setRegistrarCliente', 'Operacion\CustomersController@setRegistrarCliente');
     
+    Route::get('/dashboard/getProductosMasVendidos', 'DashboardController@getProductosMasVendidos');
+    Route::get('/dashboard/getVentasPorDia', 'DashboardController@getVentasPorDia');
 });
 
 
