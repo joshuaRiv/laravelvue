@@ -51,6 +51,9 @@ Route::group(['middleware' => ['auth']], function () {
     
     Route::get('/dashboard/getProductosMasVendidos', 'DashboardController@getProductosMasVendidos');
     Route::get('/dashboard/getVentasPorDia', 'DashboardController@getVentasPorDia');
+    
+    Route::get('/reporte/pedido/getListarPedidos', 'ReportesController@getListarPedidos');
+    Route::get('/reporte/pedido/export', 'ReportesController@export');
 });
 
 
